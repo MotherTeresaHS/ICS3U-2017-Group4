@@ -57,13 +57,16 @@ class MainMenuScene(Scene):
     def touch_ended(self, touch):
         # this method is called, when user releases a finger from the screen
         if self.start_button.frame.contains_point(touch.location):
-            self.present_modal_scene(GameScene())
+            #self.present_modal_scene(GameScene(),orientation=LANDSCAPE)
+            run(GameScene(),orientation=LANDSCAPE, show_fps=True, multi_touch=True)
+            
         
         if self.scores_button.frame.contains_point(touch.location):
             self.present_modal_scene(HighScores())
-    
+        
         if self.credits_button.frame.contains_point(touch.location):
             self.present_modal_scene(Credits())
+            
     def did_change_size(self):
         # this method is called, when user changes the orientation of the screen
         # thus changing the size of each dimension
@@ -78,4 +81,3 @@ class MainMenuScene(Scene):
         # this method is called, when user place app from background 
         # back into use. Reload anything you might need.
         pass
-    
