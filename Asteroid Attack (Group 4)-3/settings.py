@@ -6,8 +6,9 @@
 from scene import *
 import ui
 
+from main_menu_scene import *
 
-class MainMenuScene(Scene):
+class Settings(Scene):
     def setup(self):
         # this method is called, when user moves to this scene
         
