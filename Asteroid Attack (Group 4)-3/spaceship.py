@@ -4,10 +4,12 @@
 # This scene runs the main game.
 
 from scene import *
+#from main_game import *
 import math
 import sound
 import datetime
 import pprint
+from missle import *
 #from decimal import *
 
 class SpaceShip:
@@ -18,15 +20,11 @@ class SpaceShip:
         self.Angle = float(0)
         self.AngleShift = float(0)
         
-        #Flight Boundary
+        # Flight Boundary
         self.x1=x1arg
         self.y1=y1arg
         self.x2=x2arg
         self.y2=y2arg
-        self.OffsetX=0
-        #self.OffsetX2=0
-        self.OffsetY=0
-        #self.OffsetY2=0
         
         #Direction of movement / Actions
         self.Left = False
@@ -35,26 +33,28 @@ class SpaceShip:
         self.ThrustButton= False
         
         #Speed Constants (pixels/second)
-        self.Acceleration =3
+        self.Acceleration = 3
         self.DecelerationRate = 0.25
         self.MaxSpeed = 25
-        self.Sensitivity = math.radians(5)
+        self.Sensitivity = math.radians(1)
         
+        self.lazer = []
         self.Sprite = None
-        self.SpriteScale = .15
-        self.SpriteFile = './assets/sprites/spaceship.png'
+        self.SpriteScale = 1
+        self.SpriteFile = './assets/sprites/spaceship2.PNG'
         
     
     def Thrust(self):
         #Logic to control ship thrust and speed
         increase = self.Sprite.scene.dt * self.Acceleration
         oppangle = 0
-        adjangle=0
+        adjangle = 0
         
         if (self.ThrustButton == True):
                 
             #increase = self.Sprite.scene.dt * float(self.Acceleration)
             #Turning Physics
+            
             oppangle = abs(math.sin(self.AngleShift) * increase)
             adjangle = abs(math.cos(self.AngleShift) * increase)
                 
@@ -97,21 +97,23 @@ class SpaceShip:
         else:
             # Deceleration Logic
             if self.XVelocity != 0:
-                if self.XVelocity > 0:
-                    self.XVelocity -= ((self.XVelocity * self.DecelerationRate) * self.Sprite.scene.dt)
-                else:
-                    self.XVelocity -= ((self.XVelocity * self.DecelerationRate) * self.Sprite.scene.dt)
+                self.XVelocity -= ((self.XVelocity * self.DecelerationRate) * self.Sprite.scene.dt)
+                #if self.XVelocity > 0:
+                #    self.XVelocity -= ((self.XVelocity * self.DecelerationRate) * self.Sprite.scene.dt)
+                #else:
+                #    self.XVelocity -= ((self.XVelocity * self.DecelerationRate) * self.Sprite.scene.dt)
             
             if self.YVelocity != 0:
-                if self.YVelocity > 0:
-                    self.YVelocity -= ((self.YVelocity * self.DecelerationRate) * self.Sprite.scene.dt)
-                else:
-                    self.YVelocity -= ((self.YVelocity * self.DecelerationRate) * self.Sprite.scene.dt)
+                self.YVelocity -= ((self.YVelocity * self.DecelerationRate) * self.Sprite.scene.dt)
+                #if self.YVelocity > 0:
+                #    self.YVelocity -= ((self.YVelocity * self.DecelerationRate) * self.Sprite.scene.dt)
+                #else:
+                #    self.YVelocity -= ((self.YVelocity * self.DecelerationRate) * self.Sprite.scene.dt)
             
-            if abs(self.XVelocity) < 0.5:
+            if abs(self.XVelocity) < 0.1:
                 self.XVelocity = 0
             
-            if abs(self.YVelocity) < 0.5:
+            if abs(self.YVelocity) < 0.1:
                 self.YVelocity = 0
             
         #Check if ship is exceeding max speed in +/- x axis
@@ -171,7 +173,7 @@ class SpaceShip:
         
         if abs(self.YVelocity) > 0:
             moveShip = True
-            ypos = ( self.YVelocity)
+            ypos = (self.YVelocity)
         
         #Should the ship move
         if self.Sprite.position[0] < self.x1:
@@ -205,16 +207,50 @@ class SpaceShip:
             self.Sprite.remove_all_actions()
             self.Sprite.run_action(Action.move_by(xpos, ypos, 0))
         
+        for item in self.lazer:
+            #self.lazer[len(self.lazer)-1]Move()
+            item.Move()
+            if item.delete == True:
+                #item.remove_from_parent()
+                self.lazer.remove(lazer)
+        
     def Draw(self, parent, x , y):
         self.Sprite = SpriteNode(self.SpriteFile,
                                      parent = parent,
                                      position = Vector2(x,y),
                                      scale  = self.SpriteScale)
     def Shoot(self):
+        # sound that is played when user hits the shoot button
         sound.play_effect('./assets/sounds/laser1.wav')
         
-    def handle_touch(self, touch):
-        #print(datetime.datetime.now(), 'Touch details', touch.touch_id, touch.timestamp)
-        pass
+        # when the user hits the fire button
+        lazer_start_position = self.Sprite.position
+        #lazer_start_position.x = 
+        #lazer_start_position.y = 400
         
-        #pprint.pprint(touch)
+        lazer_end_position = Vector2()
+        #print(self.Angle)
+        lazer_end_position.y = math.sin(self.Angle - math.pi / 2) * 500
+        lazer_end_position.x = math.cos(self.Angle - - math.pi / 2) * 500
+        
+        
+        
+        #self.lazer.append(SpriteNode('./assets/sprites/missile.png',
+        #                     position = lazer_start_position,
+        #                     scale = 0.25,
+        #                     parent = self.Sprite.scene))
+        
+        # make missile move forward
+        #lazer = Laser(self.x1, self.y1,self.x2,self.y2)
+        self.lazer.append(Laser(self.x1, self.y1,self.x2,self.y2, self.Angle))
+        #lazer.Draw(self.Sprite, self.Sprite.position[0], self.Sprite.position[1])
+        #lazerMoveAction = Action.move_by(lazer_end_position.x, 
+        #                                 lazer_end_position.y, 
+        #                                 5.0)
+        self.lazer[len(self.lazer)-1].Draw(self.Sprite.scene, self.Sprite.position[0], self.Sprite.position[1])
+        self.lazer[len(self.lazer)-1].Sprite.rotation = self.Sprite.rotation
+        self.lazer[len(self.lazer)-1].Angle =self.Angle
+        #self.lazer[len(self.lazer)-1].UpdateTrajectory(10, self.Angle)
+        #self.lazer[len(self.lazer)-1].YVelocity = self.YVelocity
+        #self.lazer[len(self.lazer)-1].Sprite.run_action(lazerMoveAction)
+    

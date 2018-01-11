@@ -38,10 +38,10 @@ class MainMenuScene(Scene):
     
         credits_button_position = self.size/2
         credits_button_position.y = credits_button_position.y - 240
-        self.credits_button = SpriteNode('./assets/sprites/menu_button.png',
+        self.credits_button = SpriteNode('./assets/sprites/credits.png',
                                        parent = self,
                                        position = credits_button_position,
-                                       scale = 0.75)
+                                       scale = 0.4)
     def update(self):
         # this method is called, hopefully, 60 times a second
         pass
@@ -58,8 +58,7 @@ class MainMenuScene(Scene):
         # this method is called, when user releases a finger from the screen
         if self.start_button.frame.contains_point(touch.location):
             #self.present_modal_scene(GameScene(),orientation=LANDSCAPE)
-            run(GameScene(),orientation=LANDSCAPE, show_fps=True, multi_touch=True)
-            
+            run(GameScene(),orientation = LANDSCAPE, show_fps = True, multi_touch = True)
         
         if self.scores_button.frame.contains_point(touch.location):
             self.present_modal_scene(HighScores())

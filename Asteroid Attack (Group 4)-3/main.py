@@ -14,7 +14,7 @@
 #  to go, the scene transitions immediately to the first scene.
 # It is assumed you bring along all your assets, 
 #   and not use any of the mornal ones built into Pythonista.
-#y
+#
 # To exit the app in Pythonista, pull down with 2 fingers.
 
 from scene import *

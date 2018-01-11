@@ -12,11 +12,22 @@ class Credits(Scene):
     def setup(self):
         # this method is called, when user moves to this scene
         
+        center_of_screen = self.size/2
+        
         # add background color
         self.background = SpriteNode(position = self.size / 2, 
-                                     color = 'white', 
+                                     color = 'blue', 
                                      parent = self, 
                                      size = self.size)
+    
+        title_position = Vector2()
+        title_position.x = self.size.x / 2
+        title_position.y = self.size.y - 75
+        self.start_button = LabelNode(text = 'CREDITS',
+                                      font = ('Helvetica', 60),
+                                      parent = self,
+                                      position = title_position,
+                                      scale = 0.75)
     
         back_button_position = self.size
         back_button_position.x = 75

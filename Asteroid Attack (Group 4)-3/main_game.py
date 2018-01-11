@@ -73,8 +73,15 @@ class GameScene(Scene):
                                      position = boost_button_position,
                                      alpha = 1,
                                      scale = self.scale_size)
-                                     
-                   
+    
+        title_position = Vector2()
+        title_position.x = 50
+        title_position.y = self.size.y - 25
+        self.start_button = LabelNode(text = 'SCORE:',
+                                      font = ('Helvetica', 20),
+                                      parent = self,
+                                      position = title_position,
+                                      scale = 0.75)
     
         # add spaceship sprite
         #spaceship_position = Vector2()
@@ -118,7 +125,7 @@ class GameScene(Scene):
                     
         if self.shoot_button.frame.contains_point(touch.location):
             #self.shoot_button_down = True
-            print(datetime.datetime.now(), 'Begin', 'Shoot', touch.touch_id)
+            # print(datetime.datetime.now(), 'Begin', 'Shoot', touch.touch_id)
             self.Ship.Shoot()
         
         if self.boost_button.frame.contains_point(touch.location):
@@ -165,3 +172,4 @@ class GameScene(Scene):
         # back into use. Reload anything you might need.
         
         pass
+    
