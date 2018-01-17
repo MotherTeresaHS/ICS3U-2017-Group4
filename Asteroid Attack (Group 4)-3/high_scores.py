@@ -14,17 +14,26 @@ class HighScores(Scene):
         
         # add background color
         self.background = SpriteNode(position = self.size / 2, 
-                                     color = 'white', 
+                                     color = 'black', 
                                      parent = self, 
                                      size = self.size)
     
         back_button_position = self.size
         back_button_position.x = 75
         back_button_position.y = back_button_position.y - 75
-        self.back_button = SpriteNode('./assets/sprites/back_button.png',
+        self.back_button = SpriteNode('./assets/sprites/back.png',
                                        parent = self,
                                        position = back_button_position,
-                                       scale = 0.75)
+                                       scale = 0.2)
+    
+        title_position = Vector2()
+        title_position.x = self.size.x / 2
+        title_position.y = self.size.y - 75
+        self.start_button = LabelNode(text = 'HIGH SCORES',
+                                      font = ('Helvetica', 60),
+                                      parent = self,
+                                      position = title_position,
+                                      scale = 0.75)
     def update(self):
         # this method is called, hopefully, 60 times a second
         pass

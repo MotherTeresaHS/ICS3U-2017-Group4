@@ -32,10 +32,10 @@ class Credits(Scene):
         back_button_position = self.size
         back_button_position.x = 75
         back_button_position.y = back_button_position.y - 75
-        self.back_button = SpriteNode('./assets/sprites/back_button.png',
+        self.back_button = SpriteNode('./assets/sprites/back.png',
                                        parent = self,
                                        position = back_button_position,
-                                       scale = 0.75)
+                                       scale = 0.2)
     def update(self):
         # this method is called, hopefully, 60 times a second
         pass

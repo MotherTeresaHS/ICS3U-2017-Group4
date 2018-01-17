@@ -50,20 +50,20 @@ class GameScene(Scene):
         right_button_position = Vector2()
         right_button_position.x = self.size_of_screen_x - 774
         right_button_position.y = 75
-        self.right_button = SpriteNode('./assets/sprites/right_button.png',
+        self.right_button = SpriteNode('./assets/sprites/right.png',
                                      parent = self,
                                      position = right_button_position,
                                      alpha = 1,
-                                     scale = self.scale_size)
+                                     scale = 0.25)
     
         left_button_position = Vector2()
         left_button_position.x = self.size_of_screen_x - 924
         left_button_position.y = 75
-        self.left_button = SpriteNode('./assets/sprites/left_button.png',
+        self.left_button = SpriteNode('./assets/sprites/left.png',
                                      parent = self,
                                      position = left_button_position,
                                      alpha = 1,
-                                     scale = self.scale_size)
+                                     scale = 0.25)
     
         boost_button_position = Vector2()
         boost_button_position.x = self.size_of_screen_x - 250
