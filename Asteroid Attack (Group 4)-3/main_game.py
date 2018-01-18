@@ -8,6 +8,8 @@ import ui
 import math
 import datetime
 from spaceship import *
+import random
+from laser import *
 
 #from main_menu_scene import *
 
@@ -17,9 +19,11 @@ class GameScene(Scene):
         #*print('game')
         # this code was taken from Mr. Coxalls game_scene
         self.Ship = SpaceShip(0, 150 , self.size.x, self.size.y-50)
-        #self.Ship.OffsetX2 = self.size.x
-        #self.
-        #print (self.Ship.Left)
+        
+        self.asteroids = []
+        self.asteroid_attack_rate = 1
+        self.asteroid_attack_speed = 20.0
+        
         self.size_of_screen_x = self.size.x
         self.size_of_screen_y = self.size.y
         self.screen_center_x = self.size_of_screen_x/2
@@ -83,32 +87,34 @@ class GameScene(Scene):
                                       position = title_position,
                                       scale = 0.75)
     
-        # add spaceship sprite
-        #spaceship_position = Vector2()
-        #spaceship_position.x = self.size_of_screen_x / 2
-        #spaceship_position.y = self.size_of_screen_y /2
-        #self.spaceship = SpriteNode('./assets/sprites/spaceship.png',
-        #                             parent = self,
-        #                             position = spaceship_position,
-        #                             scale = self.scale_size / 3)
-        #self.Ship.Sprite = self.spaceship
         self.Ship.Draw(self, self.size_of_screen_x / 2, self.size_of_screen_y / 2)
-        
-        #print(repr(self.Ship))
         
     def update(self):
         self.Ship.Rotate()
         self.Ship.Thrust()
         if self.Ship != None:
             self.Ship.Move()
-        #pass
-        # this method is called, hopefully, 60 times a second
-        #if self.left_button_down == True:
-        #    self.spaceship.rotation= self.spaceship.rotation + self.sensitivity
-    
-        #f self.right_button_down == True:
-         #   self.spaceship.rotation= self.spaceship.rotation - self.sensitivity
-    
+        
+        asteroid_create_chance = random.randint(1, 120)
+        if asteroid_create_chance <= self.asteroid_attack_rate:
+            if len(self.asteroids) < 10:
+                self.asteroid_generator()
+        
+        if len(self.asteroids) > 0 and len(self.Ship.lazers) > 0:
+            for asteroid in self.asteroids:
+                #print('asteroid', asteroid.frame)
+                for lazerr in self.Ship.lazers:
+                    #print ('lazer', lazerr.Sprite.frame, lazerr.Sprite.position)
+                    #print ('lazer', asteroid.frame , lazerr.Sprite.position)
+                    if asteroid.frame.intersects(lazerr.Sprite.frame):
+                        print 'hit', len(self.Ship.lazers)
+                        lazerr.Sprite.remove_from_parent()
+                        self.Ship.lazers.remove(lazerr)
+                        asteroid.remove_from_parent()
+                        self.asteroids.remove(asteroid)
+                        print(len(self.asteroids), len(self.Ship.lazers))
+        else:
+            pass
         
     def touch_began(self, touch):
         # this method is called, when user touches the screen
@@ -173,3 +179,23 @@ class GameScene(Scene):
         
         pass
     
+    def asteroid_generator(self):
+        asteroid_start_position = Vector2()
+        asteroid_start_position.x = random.randint(100, self.size_of_screen_x - 100)
+        asteroid_start_position.y = self.size_of_screen_y + 100
+        
+        asteroid_end_position = Vector2()
+        asteroid_end_position.x = random.randint(100, self.size_of_screen_x - 100)
+        asteroid_end_position.y = - 100
+        
+        self.asteroids.append(SpriteNode('./assets/sprites/alien.png',
+                             position = asteroid_start_position,
+                             parent = self,
+                             scale = 0.5))
+        
+        # make missile move forward
+        asteroidMoveAction = Action.move_to(asteroid_end_position.x, 
+                                            asteroid_end_position.y, 
+                                            self.asteroid_attack_speed,
+                                            TIMING_SINODIAL)
+        self.asteroids[len(self.asteroids)-1].run_action(asteroidMoveAction)

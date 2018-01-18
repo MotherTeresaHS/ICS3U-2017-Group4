@@ -23,7 +23,7 @@ class Credits(Scene):
         title_position = Vector2()
         title_position.x = self.size.x / 2
         title_position.y = self.size.y - 75
-        self.start_button = LabelNode(text = 'CREDITS',
+        self.title = LabelNode(text = 'CREDITS',
                                       font = ('Helvetica', 60),
                                       parent = self,
                                       position = title_position,

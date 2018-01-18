@@ -8,6 +8,7 @@ from scene import *
 import math
 import sound
 import datetime
+from main_game import *
 
 #from decimal import *
 
@@ -28,6 +29,7 @@ class Laser:
         self.XVelocity = float(0)
         self.YVelocity = float(0)
         self.max_distance = 500
+        
         self.distance=0
         
         self.delete = False
@@ -45,7 +47,7 @@ class Laser:
         
         #print('Missle', self.Angle, self.scale_x, self.scale_y, self.XVelocity, self.YVelocity)
     
-    def Move(self):
+    def move(self):
         
         if self.Sprite.scene == None:
             moveShip = False
@@ -91,11 +93,11 @@ class Laser:
         
         if self.distance >= self.max_distance:
             self.Sprite.remove_from_parent()
-            self.delete == True
+            self.delete = True
         
-    def Draw(self, parent, x , y):
+    def draw(self, parent, x , y):
         self.Sprite = SpriteNode(self.SpriteFile,
                                      parent = parent,
                                      position = Vector2(x,y),
                                      scale  = self.SpriteScale)
-
+    

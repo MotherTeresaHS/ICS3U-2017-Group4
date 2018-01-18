@@ -9,7 +9,7 @@ import math
 import sound
 import datetime
 import pprint
-from missle import *
+from laser import *
 #from decimal import *
 
 class SpaceShip:
@@ -38,7 +38,7 @@ class SpaceShip:
         self.MaxSpeed = 25
         self.Sensitivity = math.radians(1)
         
-        self.lazer = []
+        self.lazers = []
         self.Sprite = None
         self.SpriteScale = 1
         self.SpriteFile = './assets/sprites/spaceship2.PNG'
@@ -207,12 +207,13 @@ class SpaceShip:
             self.Sprite.remove_all_actions()
             self.Sprite.run_action(Action.move_by(xpos, ypos, 0))
         
-        for item in self.lazer:
+        for item in self.lazers:
             #self.lazer[len(self.lazer)-1]Move()
-            item.Move()
+            item.move()
             if item.delete == True:
                 #item.remove_from_parent()
-                self.lazer.remove(lazer)
+                self.lazers.remove(item)
+                print ('ship lazers', len(self.lazers))
         
     def Draw(self, parent, x , y):
         self.Sprite = SpriteNode(self.SpriteFile,
@@ -225,8 +226,6 @@ class SpaceShip:
         
         # when the user hits the fire button
         lazer_start_position = self.Sprite.position
-        #lazer_start_position.x = 
-        #lazer_start_position.y = 400
         
         lazer_end_position = Vector2()
         #print(self.Angle)
@@ -242,14 +241,14 @@ class SpaceShip:
         
         # make missile move forward
         #lazer = Laser(self.x1, self.y1,self.x2,self.y2)
-        self.lazer.append(Laser(self.x1, self.y1,self.x2,self.y2, self.Angle))
+        self.lazers.append(Laser(self.x1, self.y1,self.x2,self.y2, self.Angle))
         #lazer.Draw(self.Sprite, self.Sprite.position[0], self.Sprite.position[1])
         #lazerMoveAction = Action.move_by(lazer_end_position.x, 
         #                                 lazer_end_position.y, 
         #                                 5.0)
-        self.lazer[len(self.lazer)-1].Draw(self.Sprite.scene, self.Sprite.position[0], self.Sprite.position[1])
-        self.lazer[len(self.lazer)-1].Sprite.rotation = self.Sprite.rotation
-        self.lazer[len(self.lazer)-1].Angle =self.Angle
+        self.lazers[len(self.lazers)-1].draw(self.Sprite.scene, self.Sprite.position[0], self.Sprite.position[1])
+        self.lazers[len(self.lazers)-1].Sprite.rotation = self.Sprite.rotation
+        self.lazers[len(self.lazers)-1].Angle =self.Angle
         #self.lazer[len(self.lazer)-1].UpdateTrajectory(10, self.Angle)
         #self.lazer[len(self.lazer)-1].YVelocity = self.YVelocity
         #self.lazer[len(self.lazer)-1].Sprite.run_action(lazerMoveAction)
