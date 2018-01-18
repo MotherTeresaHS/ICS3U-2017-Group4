@@ -12,6 +12,8 @@ class HighScores(Scene):
     def setup(self):
         # this method is called, when user moves to this scene
         
+        middle = self.size.x / 2
+        
         # add background color
         self.background = SpriteNode(position = self.size / 2, 
                                      color = 'black', 
@@ -26,10 +28,19 @@ class HighScores(Scene):
                                        position = back_button_position,
                                        scale = 0.2)
     
+        first_place = Vector2()
+        first_place.x = middle
+        first_place.y = self.size.y - 75
+        self.first_place = LabelNode(text = 'Justin     999',
+                                      font = ('Helvetica', 30),
+                                      parent = self,
+                                      position = first_place,
+                                      scale = 0.75)
+        
         title_position = Vector2()
-        title_position.x = self.size.x / 2
+        title_position.x = middle
         title_position.y = self.size.y - 75
-        self.start_button = LabelNode(text = 'HIGH SCORES',
+        self.title = LabelNode(text = 'CREDITS',
                                       font = ('Helvetica', 60),
                                       parent = self,
                                       position = title_position,
