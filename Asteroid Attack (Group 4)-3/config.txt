@@ -1,0 +1,12 @@
+[Settings]
+Sensitivity=234
+
+[Scores]
+Score1=99999
+User1=Darcy
+
+Score2=88888
+User2=
+
+Score3=
+User3=
