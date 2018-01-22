@@ -1,0 +1,19 @@
+[Settings]
+Sensitivity=234
+
+[Scores]
+Score1 = 999
+Score2 = 221
+Score3 = 451
+Score4 = 50
+Score5 = 19
+
+[Credits]
+Credit1 = d
+Credit2 = j
+Credit3 = f
+Credit4 = h
+Credit5 = a
+Credit6 = s
+Credit7 = t
+Credit8 = e
