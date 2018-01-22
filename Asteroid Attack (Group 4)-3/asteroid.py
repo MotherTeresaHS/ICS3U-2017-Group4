@@ -12,10 +12,10 @@ from main_game import *
 
 #from decimal import *
 
-class Laser:
+class Asteroid:
     
-    SpriteScale = 1
-    SpriteFile = './assets/sprites/bullet.png'
+    SpriteScale = 0.5
+    SpriteFile = './assets/sprites/asteroid.png'
     
     def __init__(self, x1arg, y1arg, x2arg, y2arg, xAngle):
         # Flight Boundary 
@@ -25,10 +25,9 @@ class Laser:
         self.y2=y2arg
         
         # Properties 
-        self.speed = 400
+        self.speed = 100
         self.XVelocity = float(0)
         self.YVelocity = float(0)
-        self.max_distance = 500
         
         self.distance=0
         
@@ -91,13 +90,11 @@ class Laser:
             self.Sprite.remove_all_actions()
             self.Sprite.run_action(Action.move_to(xpos, ypos, 0))
         
-        if self.distance >= self.max_distance:
-            self.Sprite.remove_from_parent()
-            self.delete = True
-        
     def draw(self, parent, x , y):
         self.Sprite = SpriteNode(self.SpriteFile,
                                      parent = parent,
                                      position = Vector2(x,y),
                                      scale  = self.SpriteScale)
+        print(self.Sprite == None)
+       
     

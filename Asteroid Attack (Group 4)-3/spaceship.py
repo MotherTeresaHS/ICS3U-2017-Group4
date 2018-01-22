@@ -10,6 +10,7 @@ import sound
 import datetime
 import pprint
 from laser import *
+from asteroid import *
 #from decimal import *
 
 class SpaceShip:
@@ -40,8 +41,8 @@ class SpaceShip:
         
         self.lazers = []
         self.Sprite = None
-        self.SpriteScale = 1
-        self.SpriteFile = './assets/sprites/spaceship2.PNG'
+        self.SpriteScale = 0.075
+        self.SpriteFile = './assets/sprites/SHIP3a.png'
         
     
     def Thrust(self):

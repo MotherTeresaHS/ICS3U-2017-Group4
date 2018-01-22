@@ -16,7 +16,7 @@ from laser import *
 class GameScene(Scene):
     def setup(self):
         # this method is called, when user moves to this scene
-        #*print('game')
+        
         # this code was taken from Mr. Coxalls game_scene
         self.Ship = SpaceShip(0, 150 , self.size.x, self.size.y-50)
         
@@ -100,19 +100,19 @@ class GameScene(Scene):
             if len(self.asteroids) < 10:
                 self.asteroid_generator()
         
-        if len(self.asteroids) > 0 and len(self.Ship.lazers) > 0:
+        if len(self.asteroids) > 0:
             for asteroid in self.asteroids:
                 #print('asteroid', asteroid.frame)
-                for lazerr in self.Ship.lazers:
-                    #print ('lazer', lazerr.Sprite.frame, lazerr.Sprite.position)
-                    #print ('lazer', asteroid.frame , lazerr.Sprite.position)
-                    if asteroid.frame.intersects(lazerr.Sprite.frame):
-                        print 'hit', len(self.Ship.lazers)
-                        lazerr.Sprite.remove_from_parent()
-                        self.Ship.lazers.remove(lazerr)
-                        asteroid.remove_from_parent()
-                        self.asteroids.remove(asteroid)
-                        print(len(self.asteroids), len(self.Ship.lazers))
+                asteroid.move()
+                if len(self.Ship.lazers) > 0:
+                    for lazerr in self.Ship.lazers:
+                        #print ('lazer', lazerr.Sprite.frame, lazerr.Sprite.position)
+                        #print ('lazer', asteroid.frame , lazerr.Sprite.position)
+                        if asteroid.Sprite.frame.intersects(lazerr.Sprite.frame):
+                            lazerr.Sprite.remove_from_parent()
+                            self.Ship.lazers.remove(lazerr)
+                            asteroid.Sprite.remove_from_parent()
+                            self.asteroids.remove(asteroid)
         else:
             pass
         
@@ -181,21 +181,24 @@ class GameScene(Scene):
     
     def asteroid_generator(self):
         asteroid_start_position = Vector2()
-        asteroid_start_position.x = random.randint(100, self.size_of_screen_x - 100)
-        asteroid_start_position.y = self.size_of_screen_y + 100
+        asteroid_start_position.x = random.randint(100, self.size_of_screen_x - 300)
+        asteroid_start_position.y = self.size_of_screen_y + 300
         
         asteroid_end_position = Vector2()
-        asteroid_end_position.x = random.randint(100, self.size_of_screen_x - 100)
-        asteroid_end_position.y = - 100
+        asteroid_end_position.x = random.randint(0, self.size_of_screen_y)
+        asteroid_end_position.y = self.size_of_screen_y + 200
         
-        self.asteroids.append(SpriteNode('./assets/sprites/alien.png',
-                             position = asteroid_start_position,
-                             parent = self,
-                             scale = 0.5))
+        asteroid_angle = random.randint(210, 330)
+        
+        self.asteroids.append(Asteroid(0, 150 , self.size.x, self.size.y-50, asteroid_angle))
+        
+        self.asteroids[len(self.asteroids)-1].draw(self, asteroid_end_position.x, asteroid_end_position.y)
+        #self.asteroids[len(self.asteroids)-1].Sprite.rotation = 
+        self.asteroids[len(self.asteroids)-1].Angle = asteroid_angle
         
         # make missile move forward
         asteroidMoveAction = Action.move_to(asteroid_end_position.x, 
                                             asteroid_end_position.y, 
                                             self.asteroid_attack_speed,
                                             TIMING_SINODIAL)
-        self.asteroids[len(self.asteroids)-1].run_action(asteroidMoveAction)
+        self.asteroids[len(self.asteroids)-1].Sprite.run_action(asteroidMoveAction)
