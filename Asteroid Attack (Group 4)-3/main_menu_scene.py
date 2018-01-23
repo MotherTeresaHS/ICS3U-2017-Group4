@@ -18,27 +18,36 @@ class MainMenuScene(Scene):
     def setup(self):
         # this method is called, when user moves to this scene
         
+        self.size_of_screen_x = self.size.x
+        self.size_of_screen_y = self.size.y
+        self.screen_center_x = self.size_of_screen_x/2
+        self.screen_center_y = self.size_of_screen_y/2
+        
         # add background color
-        self.background = SpriteNode(position = self.size / 2, 
-                                     color = 'white', 
+        background_position = Vector2(self.screen_center_x, 
+                                      self.screen_center_y)
+        self.bg = SpriteNode('./assets/sprites/main_bg.png',
+                                     position = background_position, 
                                      parent = self, 
                                      size = self.size)
     
-        self.start_button = SpriteNode('./assets/sprites/start.png',
+        start_button_position = Vector2()
+        start_button_position.x = self.screen_center_x
+        start_button_position.y = self.screen_center_y + 120
+        self.start_button = SpriteNode('./assets/sprites/play.JPG',
                                        parent = self,
-                                       position = self.size/2,
-                                       scale = 0.75)
+                                       position = start_button_position,
+                                       scale = 0.4)
     
         scores_button_position = self.size/2
-        scores_button_position.y = scores_button_position.y - 120
-        self.scores_button = SpriteNode('./assets/sprites/help.png',
+        self.scores_button = SpriteNode('./assets/sprites/score.PNG',
                                        parent = self,
                                        position = scores_button_position,
-                                       scale = 0.75)
+                                       scale = 1.27)
     
         credits_button_position = self.size/2
-        credits_button_position.y = credits_button_position.y - 240
-        self.credits_button = SpriteNode('./assets/sprites/credits.png',
+        credits_button_position.y = credits_button_position.y - 120
+        self.credits_button = SpriteNode('./assets/sprites/credits.JPG',
                                        parent = self,
                                        position = credits_button_position,
                                        scale = 0.4)
@@ -69,6 +78,7 @@ class MainMenuScene(Scene):
     def did_change_size(self):
         # this method is called, when user changes the orientation of the screen
         # thus changing the size of each dimension
+        self.setup()
         pass
     
     def pause(self):

@@ -5,12 +5,23 @@
 
 from scene import *
 import ui
+import ConfigParser, os
 
 from main_menu_scene import *
 
 class HighScores(Scene):
     def setup(self):
         # this method is called, when user moves to this scene
+        
+        # reads config file with high scores
+        config = ConfigParser.ConfigParser()
+        config.readfp(open('./config.txt'))
+        
+        score1 = (config.get('Scores','Score1','0'))
+        score2 = (config.get('Scores','Score2','0'))
+        score3 = (config.get('Scores','Score3','0'))
+        score4 = (config.get('Scores','Score4','0'))
+        score5 = (config.get('Scores','Score5','0'))
         
         middle = self.size.x / 2
         
@@ -27,23 +38,62 @@ class HighScores(Scene):
                                        parent = self,
                                        position = back_button_position,
                                        scale = 0.2)
-    
+        
+        # Creating labels for high scores 1-5
         first_place = Vector2()
         first_place.x = middle
-        first_place.y = self.size.y - 75
-        self.first_place = LabelNode(text = 'Justin     999',
+        first_place.y = self.size.y - 175
+        self.first_place = LabelNode(text = score1,
                                       font = ('Helvetica', 30),
                                       parent = self,
                                       position = first_place,
                                       scale = 0.75)
         
+        second_place = Vector2()
+        second_place.x = middle
+        second_place.y = self.size.y - 225
+        self.second_place = LabelNode(text = score2,
+                                      font = ('Helvetica', 30),
+                                      parent = self,
+                                      position = second_place,
+                                      scale = 0.75)
+        
+        third_place = Vector2()
+        third_place.x = middle
+        third_place.y = self.size.y - 275
+        self.third_place = LabelNode(text = score3,
+                                      font = ('Helvetica', 30),
+                                      parent = self,
+                                      position = third_place,
+                                      scale = 0.75)
+        
+        fourth_place = Vector2()
+        fourth_place.x = middle
+        fourth_place.y = self.size.y - 325
+        self.fourth_place = LabelNode(text = score4,
+                                      font = ('Helvetica', 30),
+                                      parent = self,
+                                      position = fourth_place,
+                                      scale = 0.75)
+        
+        fifth_place = Vector2()
+        fifth_place.x = middle
+        fifth_place.y = self.size.y - 375
+        self.fifth_place = LabelNode(text = score5,
+                                      font = ('Helvetica', 30),
+                                      parent = self,
+                                      position = fifth_place,
+                                      scale = 0.75)
+        
+        # create title label
         title_position = Vector2()
         title_position.x = middle
         title_position.y = self.size.y - 75
-        self.title = LabelNode(text = 'CREDITS',
+        self.title = LabelNode(text = 'HIGH SCORES',
                                       font = ('Helvetica', 60),
                                       parent = self,
                                       position = title_position,
+                                      #anchor_point = Point(.5, .5 ),
                                       scale = 0.75)
     def update(self):
         # this method is called, hopefully, 60 times a second
@@ -65,7 +115,7 @@ class HighScores(Scene):
     def did_change_size(self):
         # this method is called, when user changes the orientation of the screen
         # thus changing the size of each dimension
-        pass
+        self.setup()
     
     def pause(self):
         # this method is called, when user touches the home button

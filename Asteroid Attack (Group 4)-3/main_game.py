@@ -10,6 +10,9 @@ import datetime
 from spaceship import *
 import random
 from laser import *
+import time
+import ConfigParser, os
+from main_menu_scene import *
 
 #from main_menu_scene import *
 
@@ -33,14 +36,42 @@ class GameScene(Scene):
         
         self.scale_size = 0.75
         
+        self.score = 0
+        
+        # add borders to the screen
+        self.border1 = SpriteNode(position = Point(0,self.size.y ),
+                                    anchor_point = Point(0,1),
+                                    z_position = 1.0,
+                                    color = 'black', 
+                                    parent = self,
+                                    size = Size(self.size.x,45))
+        self.border2 = SpriteNode(position = Point(0,0 ),
+                                 anchor_point = Point(0,0),
+                                 z_position = 1.0,
+                                 color = 'black', 
+                                 parent = self,
+                                 size = Size(self.size.x,140))
+        self.border3 = SpriteNode(position = Point(0,0 ),
+                                    anchor_point = Point(0,0),
+                                    z_position = 1.0,
+                                    color = 'black', 
+                                    parent = self,
+                                    size = Size(12.5,self.size.y))
+        self.border4 = SpriteNode(position = Point(self.size.x - 12.5 ,0 ),
+                                    anchor_point = Point(0,0),
+                                    z_position = 1.0,
+                                    color = 'black', 
+                                    parent = self,
+                                    size = Size(12.5,self.size.y))
+        
         # add background image
         background_position = Vector2(self.screen_center_x, 
                                       self.screen_center_y)
-        #self.bg = SpriteNode('./assets/sprites/star_background.png',
-        #                             position = background_position, 
-        #                             parent = self, 
-        #                             size = self.size)
-        #                             
+        self.bg = SpriteNode('./assets/sprites/star_background.png',
+                                     position = background_position, 
+                                     parent = self, 
+                                     size = self.size)
+                                     
         # add game buttons
         shoot_button_position = Vector2()
         shoot_button_position.x = self.size_of_screen_x - 100
@@ -49,6 +80,7 @@ class GameScene(Scene):
                                      parent = self,
                                      position = shoot_button_position,
                                      alpha = 1,
+                                     z_position = 2,
                                      scale = self.scale_size)
         
         right_button_position = Vector2()
@@ -58,6 +90,7 @@ class GameScene(Scene):
                                      parent = self,
                                      position = right_button_position,
                                      alpha = 1,
+                                     z_position = 2,
                                      scale = 0.25)
     
         left_button_position = Vector2()
@@ -67,6 +100,7 @@ class GameScene(Scene):
                                      parent = self,
                                      position = left_button_position,
                                      alpha = 1,
+                                     z_position = 2,
                                      scale = 0.25)
     
         boost_button_position = Vector2()
@@ -76,43 +110,74 @@ class GameScene(Scene):
                                      parent = self,
                                      position = boost_button_position,
                                      alpha = 1,
+                                     z_position = 2,
                                      scale = self.scale_size)
     
-        title_position = Vector2()
-        title_position.x = 50
-        title_position.y = self.size.y - 25
-        self.start_button = LabelNode(text = 'SCORE:',
+        score_position = Vector2()
+        score_position.x = 50
+        score_position.y = self.size.y - 25
+        self.score_label = LabelNode(text = ('SCORE: ' + str(self.score)),
                                       font = ('Helvetica', 20),
                                       parent = self,
-                                      position = title_position,
+                                      position = score_position,
+                                      z_position = 2,
                                       scale = 0.75)
     
         self.Ship.Draw(self, self.size_of_screen_x / 2, self.size_of_screen_y / 2)
         
     def update(self):
-        self.Ship.Rotate()
-        self.Ship.Thrust()
+        
         if self.Ship != None:
             self.Ship.Move()
+            self.Ship.Rotate()
+            self.Ship.Thrust()
         
         asteroid_create_chance = random.randint(1, 120)
         if asteroid_create_chance <= self.asteroid_attack_rate:
             if len(self.asteroids) < 10:
                 self.asteroid_generator()
         
+        if self.Ship.destoryed == True:
+            if not self.presented_scene and time.time() - self.destroy_time > 3:
+                self.view.close()
+        
         if len(self.asteroids) > 0:
             for asteroid in self.asteroids:
                 #print('asteroid', asteroid.frame)
                 asteroid.move()
+                if asteroid.Sprite.frame.intersects(self.Ship.Sprite.frame) and self.Ship.destoryed == False:
+                    self.save_scores()
+                    text_position = Vector2()
+                    text_position.x = self.size.x/2
+                    text_position.y = self.size.y/2
+                    self.game_over = LabelNode(text = ('GAME OVER'),
+                                               font = ('Helvetica', 140),
+                                               parent = self,
+                                               position = text_position,
+                                               scale = 1)
+                    self.destroy_time = time.time()
+                    self.Ship.destoryed = True
+                    self.Ship.Sprite.texture = None
                 if len(self.Ship.lazers) > 0:
                     for lazerr in self.Ship.lazers:
                         #print ('lazer', lazerr.Sprite.frame, lazerr.Sprite.position)
                         #print ('lazer', asteroid.frame , lazerr.Sprite.position)
                         if asteroid.Sprite.frame.intersects(lazerr.Sprite.frame):
+                            if asteroid.size > 1:
+                                self.asteroid_builder(lazerr.Angle, asteroid.Sprite.position, asteroid.size - 1)
+                                self.asteroid_builder(lazerr.Angle, asteroid.Sprite.position, asteroid.size - 1)
+                            if asteroid.size == 3:
+                                self.score += 99
+                            elif asteroid.size == 2:
+                                self.score += 199
+                            else:
+                                self.score += 499
+                            self.score_label.text = ('SCORE: ' + str(self.score))
                             lazerr.Sprite.remove_from_parent()
                             self.Ship.lazers.remove(lazerr)
                             asteroid.Sprite.remove_from_parent()
                             self.asteroids.remove(asteroid)
+                            
         else:
             pass
         
@@ -188,9 +253,10 @@ class GameScene(Scene):
         asteroid_end_position.x = random.randint(0, self.size_of_screen_y)
         asteroid_end_position.y = self.size_of_screen_y + 200
         
-        asteroid_angle = random.randint(210, 330)
+        asteroid_angle = random.randint(1, 89)
+        asteroid_angle += (random.randint(0,3) * 90 )
         
-        self.asteroids.append(Asteroid(0, 150 , self.size.x, self.size.y-50, asteroid_angle))
+        self.asteroids.append(Asteroid(0, 150 , self.size.x, self.size.y-50, asteroid_angle, 3))
         
         self.asteroids[len(self.asteroids)-1].draw(self, asteroid_end_position.x, asteroid_end_position.y)
         #self.asteroids[len(self.asteroids)-1].Sprite.rotation = 
@@ -202,3 +268,49 @@ class GameScene(Scene):
                                             self.asteroid_attack_speed,
                                             TIMING_SINODIAL)
         self.asteroids[len(self.asteroids)-1].Sprite.run_action(asteroidMoveAction)
+        
+    def asteroid_builder(self, impact_angle, position, size):
+        impact_angle = int(impact_angle)
+        min_angle = impact_angle - 45
+        max_angle = impact_angle + 45
+        print ('angle', impact_angle, min_angle, max_angle)
+        asteroid_angle = random.randint(min_angle, max_angle)
+        
+        self.asteroids.append(Asteroid(0, 150 , self.size.x, self.size.y-50, asteroid_angle, size))
+        
+        self.asteroids[len(self.asteroids)-1].draw(self, position.x, position.y)
+        #self.asteroids[len(self.asteroids)-1].Sprite.rotation = 
+        self.asteroids[len(self.asteroids)-1].Angle = asteroid_angle
+        
+        # make missile move forward
+        asteroidMoveAction = Action.move_to(position.x, 
+                                            position.y, 
+                                            self.asteroid_attack_speed,
+                                            TIMING_SINODIAL)
+        self.asteroids[len(self.asteroids)-1].Sprite.run_action(asteroidMoveAction)
+        
+    def save_scores(self):
+    	
+        # reads config with high scores	
+        config = ConfigParser.ConfigParser()
+        config.readfp(open('./config.txt'))
+        
+        for x in range (1,6):
+            saved_score = (config.get('Scores','score' + str(x),'0'))
+            if self.score >= int(saved_score):
+                # shift scores down before we save
+                for i in range (5, x, -1):
+                    previous_score = config.get('Scores', 'Score' + str(i - 1), self.score)
+                    config.set('Scores', 'Score' + str(i), previous_score)
+                config.set('Scores', 'Score' + str(x), self.score)
+                #config.set('Scores','score' + str(x), self.score)
+                #for y in range(5, x, -1):
+                    #print x, y
+                    #if y >= 2:
+                        #higher_score = config.get(config.get('Scores','score' + str(y -  1),'0'))
+                        #config.set('Scores','score' + str(y), higher_score)
+                #config.set('Scores','score' + str(y + 1), next_score)
+                with open('./config.txt', 'w') as configfile:
+                    config.write(configfile)
+                break
+    

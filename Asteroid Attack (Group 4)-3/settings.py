@@ -37,7 +37,7 @@ class Settings(Scene):
     def did_change_size(self):
         # this method is called, when user changes the orientation of the screen
         # thus changing the size of each dimension
-        pass
+        self.setup()
     
     def pause(self):
         # this method is called, when user touches the home button

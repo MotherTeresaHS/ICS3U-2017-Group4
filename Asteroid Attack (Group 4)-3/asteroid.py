@@ -8,7 +8,7 @@ from scene import *
 import math
 import sound
 import datetime
-from main_game import *
+#from main_game import *
 
 #from decimal import *
 
@@ -17,7 +17,7 @@ class Asteroid:
     SpriteScale = 0.5
     SpriteFile = './assets/sprites/asteroid.png'
     
-    def __init__(self, x1arg, y1arg, x2arg, y2arg, xAngle):
+    def __init__(self, x1arg, y1arg, x2arg, y2arg, xAngle, size):
         # Flight Boundary 
         self.x1=x1arg
         self.y1=y1arg
@@ -26,6 +26,7 @@ class Asteroid:
         
         # Properties 
         self.speed = 100
+        self.size = size
         self.XVelocity = float(0)
         self.YVelocity = float(0)
         
@@ -91,10 +92,19 @@ class Asteroid:
             self.Sprite.run_action(Action.move_to(xpos, ypos, 0))
         
     def draw(self, parent, x , y):
+        if self.size == 3:
+            scale = self.SpriteScale * (3/3)
+        elif self.size == 2:
+            #scale = self.SpriteScale * (2/3)
+            scale = 0.3
+        else: 
+            #scale = self.SpriteScale * (1/3)
+            scale = 0.2
+        
         self.Sprite = SpriteNode(self.SpriteFile,
                                      parent = parent,
                                      position = Vector2(x,y),
-                                     scale  = self.SpriteScale)
+                                     scale = scale)
         print(self.Sprite == None)
        
     

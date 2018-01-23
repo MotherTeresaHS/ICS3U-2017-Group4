@@ -11,6 +11,7 @@ import datetime
 import pprint
 from laser import *
 from asteroid import *
+import ConfigParser, os
 #from decimal import *
 
 class SpaceShip:
@@ -20,6 +21,7 @@ class SpaceShip:
         self.YVelocity = float(0)
         self.Angle = float(0)
         self.AngleShift = float(0)
+        self.destoryed = False
         
         # Flight Boundary
         self.x1=x1arg
@@ -37,7 +39,7 @@ class SpaceShip:
         self.Acceleration = 3
         self.DecelerationRate = 0.25
         self.MaxSpeed = 25
-        self.Sensitivity = math.radians(1)
+        self.Sensitivity = math.radians(1.75)
         
         self.lazers = []
         self.Sprite = None
@@ -55,45 +57,16 @@ class SpaceShip:
                 
             #increase = self.Sprite.scene.dt * float(self.Acceleration)
             #Turning Physics
+            realangle = self.Angle + 90
+            if realangle > 360:
+                realangle -= 360
+            oppangle = math.sin(math.radians(realangle)) 
+            adjangle = math.cos(math.radians(realangle))
+            #wprint (realangle, oppangle, adjangle, self.XVelocity, self.YVelocity)
+            #* increase) * self.Sprite.scene.dt.XVelocity += xmv
             
-            oppangle = abs(math.sin(self.AngleShift) * increase)
-            adjangle = abs(math.cos(self.AngleShift) * increase)
-                
-            #self.XVelocity += xmv
-            if self.Angle == 0:
-               self.YVelocity += increase
-            elif self.Angle == 90:
-                self.XVelocity -= increase
-            elif self.Angle == 180:
-                self.YVelocity -= increase
-            elif self.Angle == 270:
-                self.XVelocity += increase
-            elif self.Angle == 360:
-                self.YVelocity -= increase
-            elif self.Angle >0 and self.Angle < 45:
-                self.XVelocity -= adjangle
-                self.YVelocity += oppangle
-            elif self.Angle >= 45 and self.Angle < 90:
-                self.XVelocity -= oppangle
-                self.YVelocity += adjangle
-            elif self.Angle > 90 and self.Angle < 135:
-                self.XVelocity -= oppangle
-                self.YVelocity -= adjangle
-            elif self.Angle >= 135 and self.Angle < 180:
-                self.XVelocity -= adjangle
-                self.YVelocity -= oppangle
-            elif self.Angle > 180 and self.Angle < 225:
-                self.XVelocity += adjangle
-                self.YVelocity -= oppangle
-            elif self.Angle >= 225 and self.Angle < 270:
-                self.XVelocity += oppangle
-                self.YVelocity -= adjangle
-            elif self.Angle > 270 and self.Angle < 315:
-                self.XVelocity += oppangle
-                self.YVelocity += adjangle
-            elif self.Angle >= 315 and self.Angle < 360:
-                self.XVelocity += adjangle
-                self.YVelocity += oppangle
+            self.XVelocity += increase * adjangle
+            self.YVelocity += increase * oppangle 
                 
         else:
             # Deceleration Logic
@@ -215,13 +188,18 @@ class SpaceShip:
                 #item.remove_from_parent()
                 self.lazers.remove(item)
                 print ('ship lazers', len(self.lazers))
+                self.Sprite.scene.score
         
     def Draw(self, parent, x , y):
         self.Sprite = SpriteNode(self.SpriteFile,
                                      parent = parent,
                                      position = Vector2(x,y),
                                      scale  = self.SpriteScale)
+    
     def Shoot(self):
+        if self.destoryed == True:
+            return None
+            
         # sound that is played when user hits the shoot button
         sound.play_effect('./assets/sounds/laser1.wav')
         
@@ -249,7 +227,8 @@ class SpaceShip:
         #                                 5.0)
         self.lazers[len(self.lazers)-1].draw(self.Sprite.scene, self.Sprite.position[0], self.Sprite.position[1])
         self.lazers[len(self.lazers)-1].Sprite.rotation = self.Sprite.rotation
-        self.lazers[len(self.lazers)-1].Angle =self.Angle
+        self.lazers[len(self.lazers)-1].Angle = self.Angle
+        
         #self.lazer[len(self.lazer)-1].UpdateTrajectory(10, self.Angle)
         #self.lazer[len(self.lazer)-1].YVelocity = self.YVelocity
         #self.lazer[len(self.lazer)-1].Sprite.run_action(lazerMoveAction)
