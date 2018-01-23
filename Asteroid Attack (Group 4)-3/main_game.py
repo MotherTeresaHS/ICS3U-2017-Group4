@@ -143,7 +143,6 @@ class GameScene(Scene):
         
         if len(self.asteroids) > 0:
             for asteroid in self.asteroids:
-                #print('asteroid', asteroid.frame)
                 asteroid.move()
                 if asteroid.sprite.frame.intersects(self.ship.sprite.frame) and self.ship.destroyed == False:
                     self.save_scores()
@@ -160,8 +159,6 @@ class GameScene(Scene):
                     self.ship.sprite.texture = None
                 if len(self.ship.lazers) > 0:
                     for laser in self.ship.lazers:
-                        #print ('lazer', laser.sprite.frame, laser.sprite.position)
-                        #print ('lazer', asteroid.frame , laser.sprite.position)
                         if asteroid.sprite.frame.intersects(laser.sprite.frame):
                             if asteroid.size > 1:
                                 self.asteroid_builder(laser.angle, asteroid.sprite.position, asteroid.size - 1)
@@ -204,18 +201,15 @@ class GameScene(Scene):
         # this method is called, when user releases a finger from the screen
 
         if self.shoot_button.frame.contains_point(touch.location):
-            #self.ship.Shoot()
-            #print(datetime.datetime.now(), 'End', 'Shoot', touch.touch_id)
-            #self.create_new_missile()
+            #Place holder so that the else statement works
+            #without it, the rotation will stop during the shoot button release
             pass
         elif self.boost_button.frame.contains_point(touch.location):
-            #print(datetime.datetime.now(), 'End', 'Thrust', touch.touch_id)
+            #Boost/Thrust button released
             self.ship.thrust_button = False
             #pass
         else:
-            # if I removed my finger, then no matter what spaceship
-            #    should not be moving any more
-            #print(datetime.datetime.now(), 'End', 'Rotate', touch.touch_id)
+            #Else we assume the they let their finger of the rotate controls.
             self.ship.left = False
             self.ship.right = False
     
@@ -236,50 +230,39 @@ class GameScene(Scene):
         pass
     
     def asteroid_generator(self):
-        asteroid_start_position = Vector2()
-        asteroid_start_position.x = random.randint(100, self.size_of_screen_x - 300)
-        asteroid_start_position.y = self.size_of_screen_y + 300
-        
-        asteroid_end_position = Vector2()
-        asteroid_end_position.x = random.randint(0, self.size_of_screen_y)
-        asteroid_end_position.y = self.size_of_screen_y + 200
 
-        #Produces a Random angle but not one that is in a straight line. i.e. 90/180, etc
+        #Create a random location to spawn the asteroid
+        asteroid_start_position = Vector2()
+        asteroid_start_position.x = random.randint(0, self.size_of_screen_y)
+        asteroid_start_position.y = self.size_of_screen_y + 200
+
+        #Generate a Random angle but not one that is in a straight line. i.e. 90/180, etc
         asteroid_angle = random.randint(1, 89)
         asteroid_angle += (random.randint(0,3) * 90 )
-        
+
+        #Create the Asteroid and Append to the list
         self.asteroids.append(Asteroid(0, 150 , self.size.x, self.size.y - 50, asteroid_angle, 3))
-        
         self.asteroids[len(self.asteroids)-1].draw(self, asteroid_end_position.x, asteroid_end_position.y)
-        #self.asteroids[len(self.asteroids)-1].sprite.rotation = 
-        self.asteroids[len(self.asteroids)-1].angle = asteroid_angle
-        
-        # make missile move forward
-        asteroidMoveAction = Action.move_to(asteroid_end_position.x, 
-                                            asteroid_end_position.y, 
-                                            self.asteroid_attack_speed,
-                                            TIMING_SINODIAL)
-        self.asteroids[len(self.asteroids)-1].sprite.run_action(asteroidMoveAction)
+     
         
     def asteroid_builder(self, impact_angle, position, size):
+
+        #Similar to the generator, but builds a new version at a specified location
+        #Used for asteroid splitting.
+
+        #Convert angle to a integer
         impact_angle = int(impact_angle)
+
+        #Calculate the Min and Max Angles of Deflection
         min_angle = impact_angle - 45
         max_angle = impact_angle + 45
-        print ('angle', impact_angle, min_angle, max_angle)
+
+        #Generate deflection angle
         asteroid_angle = random.randint(min_angle, max_angle)
-        
+
+        #Create the Asteroid and Append to the list
         self.asteroids.append(Asteroid(0, 150 , self.size.x, self.size.y-50, asteroid_angle, size))
-        
         self.asteroids[len(self.asteroids)-1].draw(self, position.x, position.y)
-        #self.asteroids[len(self.asteroids)-1].sprite.rotation = 
-        self.asteroids[len(self.asteroids)-1].angle = asteroid_angle
-        
-        # make missile move forward
-        asteroidMoveAction = Action.move_to(position.x, 
-                                            position.y, 
-                                            self.asteroid_attack_speed,
-                                            TIMING_SINODIAL)
-        self.asteroids[len(self.asteroids)-1].sprite.run_action(asteroidMoveAction)
         
     def save_scores(self):
     	
@@ -295,13 +278,8 @@ class GameScene(Scene):
                     previous_score = config.get('Scores', 'Score' + str(i - 1), self.score)
                     config.set('Scores', 'Score' + str(i), previous_score)
                 config.set('Scores', 'Score' + str(x), self.score)
-                #config.set('Scores','score' + str(x), self.score)
-                #for y in range(5, x, -1):
-                    #print x, y
-                    #if y >= 2:
-                        #higher_score = config.get(config.get('Scores','score' + str(y -  1),'0'))
-                        #config.set('Scores','score' + str(y), higher_score)
-                #config.set('Scores','score' + str(y + 1), next_score)
+
+                #Save the config file
                 with open('./config.txt', 'w') as configfile:
                     config.write(configfile)
                 break
