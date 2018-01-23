@@ -21,7 +21,7 @@ class GameScene(Scene):
         # this method is called, when user moves to this scene
         
         # this code was taken from Mr. Coxalls game_scene
-        self.Ship = SpaceShip(0, 150 , self.size.x, self.size.y-50)
+        self.ship = SpaceShip(0, 150 , self.size.x, self.size.y-50)
         
         self.asteroids = []
         self.asteroid_attack_rate = 1
@@ -123,21 +123,21 @@ class GameScene(Scene):
                                       z_position = 2,
                                       scale = 0.75)
     
-        self.Ship.Draw(self, self.size_of_screen_x / 2, self.size_of_screen_y / 2)
+        self.ship.Draw(self, self.size_of_screen_x / 2, self.size_of_screen_y / 2)
         
     def update(self):
         
-        if self.Ship != None:
-            self.Ship.Move()
-            self.Ship.Rotate()
-            self.Ship.Thrust()
+        if self.ship != None:
+            self.ship.Move()
+            self.ship.Rotate()
+            self.ship.Thrust()
         
         asteroid_create_chance = random.randint(1, 120)
         if asteroid_create_chance <= self.asteroid_attack_rate:
             if len(self.asteroids) < 10:
                 self.asteroid_generator()
         
-        if self.Ship.destoryed == True:
+        if self.ship.destroyed == True:
             if not self.presented_scene and time.time() - self.destroy_time > 3:
                 self.view.close()
         
@@ -145,7 +145,7 @@ class GameScene(Scene):
             for asteroid in self.asteroids:
                 #print('asteroid', asteroid.frame)
                 asteroid.move()
-                if asteroid.Sprite.frame.intersects(self.Ship.Sprite.frame) and self.Ship.destoryed == False:
+                if asteroid.sprite.frame.intersects(self.ship.sprite.frame) and self.ship.destroyed == False:
                     self.save_scores()
                     text_position = Vector2()
                     text_position.x = self.size.x/2
@@ -156,16 +156,16 @@ class GameScene(Scene):
                                                position = text_position,
                                                scale = 1)
                     self.destroy_time = time.time()
-                    self.Ship.destoryed = True
-                    self.Ship.Sprite.texture = None
-                if len(self.Ship.lazers) > 0:
-                    for lazerr in self.Ship.lazers:
-                        #print ('lazer', lazerr.Sprite.frame, lazerr.Sprite.position)
-                        #print ('lazer', asteroid.frame , lazerr.Sprite.position)
-                        if asteroid.Sprite.frame.intersects(lazerr.Sprite.frame):
+                    self.ship.destroyed = True
+                    self.ship.sprite.texture = None
+                if len(self.ship.lazers) > 0:
+                    for laser in self.ship.lazers:
+                        #print ('lazer', laser.sprite.frame, laser.sprite.position)
+                        #print ('lazer', asteroid.frame , laser.sprite.position)
+                        if asteroid.sprite.frame.intersects(laser.sprite.frame):
                             if asteroid.size > 1:
-                                self.asteroid_builder(lazerr.Angle, asteroid.Sprite.position, asteroid.size - 1)
-                                self.asteroid_builder(lazerr.Angle, asteroid.Sprite.position, asteroid.size - 1)
+                                self.asteroid_builder(laser.angle, asteroid.sprite.position, asteroid.size - 1)
+                                self.asteroid_builder(laser.angle, asteroid.sprite.position, asteroid.size - 1)
                             if asteroid.size == 3:
                                 self.score += 99
                             elif asteroid.size == 2:
@@ -173,9 +173,9 @@ class GameScene(Scene):
                             else:
                                 self.score += 499
                             self.score_label.text = ('SCORE: ' + str(self.score))
-                            lazerr.Sprite.remove_from_parent()
-                            self.Ship.lazers.remove(lazerr)
-                            asteroid.Sprite.remove_from_parent()
+                            laser.sprite.remove_from_parent()
+                            self.ship.lazers.remove(laser)
+                            asteroid.sprite.remove_from_parent()
                             self.asteroids.remove(asteroid)
                             
         else:
@@ -186,23 +186,23 @@ class GameScene(Scene):
         
         if self.left_button.frame.contains_point(touch.location):
             #self.left_button_down = True
-            self.Ship.Left = True
+            self.ship.left = True
             #print(datetime.datetime.now(), 'Begin', 'Left', touch.touch_id)
          
         if self.right_button.frame.contains_point(touch.location):
             #self.right_button_down = True
-            self.Ship.Right = True
+            self.ship.right = True
             #print(datetime.datetime.now(), 'Begin', 'Right', touch.touch_id)
                     
         if self.shoot_button.frame.contains_point(touch.location):
             #self.shoot_button_down = True
             # print(datetime.datetime.now(), 'Begin', 'Shoot', touch.touch_id)
-            self.Ship.Shoot()
+            self.ship.Shoot()
         
         if self.boost_button.frame.contains_point(touch.location):
             #self.boost_button_down = True
             #print(datetime.datetime.now(), 'Begin', 'Thrust', touch.touch_id)
-            self.Ship.ThrustButton = True
+            self.ship.ThrustButton = True
             #rint 'boosted'
     
     def touch_moved(self, touch):
@@ -213,20 +213,20 @@ class GameScene(Scene):
         # this method is called, when user releases a finger from the screen
         #print('End', '', touch.touch_id)
         if self.shoot_button.frame.contains_point(touch.location):
-            #self.Ship.Shoot()
+            #self.ship.Shoot()
             #print(datetime.datetime.now(), 'End', 'Shoot', touch.touch_id)
             #self.create_new_missile()
             pass
         elif self.boost_button.frame.contains_point(touch.location):
             #print(datetime.datetime.now(), 'End', 'Thrust', touch.touch_id)
-            self.Ship.ThrustButton = False
+            self.ship.ThrustButton = False
             #pass
         else:
             # if I removed my finger, then no matter what spaceship
             #    should not be moving any more
             #print(datetime.datetime.now(), 'End', 'Rotate', touch.touch_id)
-            self.Ship.Left = False
-            self.Ship.Right = False
+            self.ship.left = False
+            self.ship.right = False
     
     def did_change_size(self):
         # this method is called, when user changes the orientation of the screen
@@ -252,22 +252,23 @@ class GameScene(Scene):
         asteroid_end_position = Vector2()
         asteroid_end_position.x = random.randint(0, self.size_of_screen_y)
         asteroid_end_position.y = self.size_of_screen_y + 200
-        
+
+        #Produces a Random angle but not one that is in a straight line. i.e. 90/180, etc
         asteroid_angle = random.randint(1, 89)
         asteroid_angle += (random.randint(0,3) * 90 )
         
-        self.asteroids.append(Asteroid(0, 150 , self.size.x, self.size.y-50, asteroid_angle, 3))
+        self.asteroids.append(Asteroid(0, 150 , self.size.x, self.size.y - 50, asteroid_angle, 3))
         
         self.asteroids[len(self.asteroids)-1].draw(self, asteroid_end_position.x, asteroid_end_position.y)
-        #self.asteroids[len(self.asteroids)-1].Sprite.rotation = 
-        self.asteroids[len(self.asteroids)-1].Angle = asteroid_angle
+        #self.asteroids[len(self.asteroids)-1].sprite.rotation = 
+        self.asteroids[len(self.asteroids)-1].angle = asteroid_angle
         
         # make missile move forward
         asteroidMoveAction = Action.move_to(asteroid_end_position.x, 
                                             asteroid_end_position.y, 
                                             self.asteroid_attack_speed,
                                             TIMING_SINODIAL)
-        self.asteroids[len(self.asteroids)-1].Sprite.run_action(asteroidMoveAction)
+        self.asteroids[len(self.asteroids)-1].sprite.run_action(asteroidMoveAction)
         
     def asteroid_builder(self, impact_angle, position, size):
         impact_angle = int(impact_angle)
@@ -279,15 +280,15 @@ class GameScene(Scene):
         self.asteroids.append(Asteroid(0, 150 , self.size.x, self.size.y-50, asteroid_angle, size))
         
         self.asteroids[len(self.asteroids)-1].draw(self, position.x, position.y)
-        #self.asteroids[len(self.asteroids)-1].Sprite.rotation = 
-        self.asteroids[len(self.asteroids)-1].Angle = asteroid_angle
+        #self.asteroids[len(self.asteroids)-1].sprite.rotation = 
+        self.asteroids[len(self.asteroids)-1].angle = asteroid_angle
         
         # make missile move forward
         asteroidMoveAction = Action.move_to(position.x, 
                                             position.y, 
                                             self.asteroid_attack_speed,
                                             TIMING_SINODIAL)
-        self.asteroids[len(self.asteroids)-1].Sprite.run_action(asteroidMoveAction)
+        self.asteroids[len(self.asteroids)-1].sprite.run_action(asteroidMoveAction)
         
     def save_scores(self):
     	

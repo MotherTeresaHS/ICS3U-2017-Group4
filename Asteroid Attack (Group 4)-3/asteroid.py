@@ -1,21 +1,17 @@
 # Created by: Justin Bronson
 # Created on: Dec 2017
 # Created for: ICS3U
-# This scene runs the main game.
+# This scene controls Asteroids
 
 from scene import *
-#from main_game import *
 import math
 import sound
 import datetime
-#from main_game import *
-
-#from decimal import *
 
 class Asteroid:
     
-    SpriteScale = 0.5
-    SpriteFile = './assets/sprites/asteroid.png'
+    sprite_scale = 0.5
+    sprite_file = './assets/sprites/asteroid.png'
     
     def __init__(self, x1arg, y1arg, x2arg, y2arg, xAngle, size):
         # Flight Boundary 
@@ -27,84 +23,84 @@ class Asteroid:
         # Properties 
         self.speed = 100
         self.size = size
-        self.XVelocity = float(0)
-        self.YVelocity = float(0)
+        self.x_velocity = float(0)
+        self.y_velocity = float(0)
         
         self.distance=0
         
         self.delete = False
         
-        self.Angle = xAngle + 90
-        if self.Angle > 360:
-            self.Angle -= 360
+        self.angle = xAngle + 90
+        if self.angle > 360:
+            self.angle -= 360
             
-        self.Sprite = None
+        self.sprite = None
         
-        self.scale_x = math.cos(math.radians(self.Angle))
-        self.scale_y = math.sin(math.radians(self.Angle)) 
-        self.XVelocity = self.speed * self.scale_x 
-        self.YVelocity = self.speed * self.scale_y 
+        self.scale_x = math.cos(math.radians(self.angle))
+        self.scale_y = math.sin(math.radians(self.angle)) 
+        self.x_velocity = self.speed * self.scale_x 
+        self.y_velocity = self.speed * self.scale_y 
         
-        #print('Missle', self.Angle, self.scale_x, self.scale_y, self.XVelocity, self.YVelocity)
+        #print('Missle', self.angle, self.scale_x, self.scale_y, self.x_velocity, self.y_velocity)
     
     def move(self):
         
-        if self.Sprite.scene == None:
-            moveShip = False
+        if self.sprite.scene == None:
+            move_sprite = False
         else:
-            moveShip = True
-            xpos = self.Sprite.position[0] + self.XVelocity * self.Sprite.scene.dt
-            ypos = self.Sprite.position[1] + self.YVelocity * self.Sprite.scene.dt
-            self.distance += self.speed * self.Sprite.scene.dt
+            move_sprite = True
+            xpos = self.sprite.position[0] + self.x_velocity * self.sprite.scene.dt
+            ypos = self.sprite.position[1] + self.y_velocity * self.sprite.scene.dt
+            self.distance += self.speed * self.sprite.scene.dt
         
         #Should the ship move
-        if self.Sprite.position[0] < self.x1:
+        if self.sprite.position[0] < self.x1:
             #Ship has moved off screen
             xpos = self.x2
-            ypos = self.Sprite.position[1]
-            self.Sprite.remove_all_actions()
-            self.Sprite.run_action(Action.move_to(xpos, ypos, 0))
-            moveShip = False
+            ypos = self.sprite.position[1]
+            self.sprite.remove_all_actions()
+            self.sprite.run_action(Action.move_to(xpos, ypos, 0))
+            move_sprite= False
             
-        elif self.Sprite.position[0] > self.x2:
+        elif self.sprite.position[0] > self.x2:
             xpos = self.x1
-            ypos = self.Sprite.position[1]
-            self.Sprite.remove_all_actions()
-            self.Sprite.run_action(Action.move_to(xpos, ypos, 0))
-            moveShip = False
+            ypos = self.sprite.position[1]
+            self.sprite.remove_all_actions()
+            self.sprite.run_action(Action.move_to(xpos, ypos, 0))
+            move_sprite= False
         
-        if self.Sprite.position[1] < self.y1:
+        if self.sprite.position[1] < self.y1:
             ypos = self.y2
-            xpos = self.Sprite.position[0]
-            self.Sprite.remove_all_actions()
-            self.Sprite.run_action(Action.move_to(xpos, ypos, 0))
-            moveShip = False
+            xpos = self.sprite.position[0]
+            self.sprite.remove_all_actions()
+            self.sprite.run_action(Action.move_to(xpos, ypos, 0))
+            move_sprite= False
             
-        elif self.Sprite.position[1] > self.y2:
+        elif self.sprite.position[1] > self.y2:
             ypos = self.y1
-            xpos = self.Sprite.position[0]
-            self.Sprite.remove_all_actions()
-            self.Sprite.run_action(Action.move_to(xpos, ypos, 0))
-            moveShip = False
+            xpos = self.sprite.position[0]
+            self.sprite.remove_all_actions()
+            self.sprite.run_action(Action.move_to(xpos, ypos, 0))
+            move_sprite= False
         
-        if moveShip == True:
-            self.Sprite.remove_all_actions()
-            self.Sprite.run_action(Action.move_to(xpos, ypos, 0))
+        if move_sprite== True:
+            self.sprite.remove_all_actions()
+            self.sprite.run_action(Action.move_to(xpos, ypos, 0))
         
     def draw(self, parent, x , y):
         if self.size == 3:
-            scale = self.SpriteScale * (3/3)
+            scale = self.sprite_scale * (3/3)
         elif self.size == 2:
-            #scale = self.SpriteScale * (2/3)
+            #scale = self.sprite_scale * (2/3)
             scale = 0.3
         else: 
-            #scale = self.SpriteScale * (1/3)
+            #scale = self.sprite_scale * (1/3)
             scale = 0.2
         
-        self.Sprite = SpriteNode(self.SpriteFile,
+        self.sprite = SpriteNode(self.sprite_file,
                                      parent = parent,
                                      position = Vector2(x,y),
                                      scale = scale)
-        print(self.Sprite == None)
+        
        
     
