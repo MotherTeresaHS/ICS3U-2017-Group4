@@ -183,27 +183,18 @@ class GameScene(Scene):
         
     def touch_began(self, touch):
         # this method is called, when user touches the screen
-        
+
         if self.left_button.frame.contains_point(touch.location):
-            #self.left_button_down = True
             self.ship.left = True
-            #print(datetime.datetime.now(), 'Begin', 'Left', touch.touch_id)
          
         if self.right_button.frame.contains_point(touch.location):
-            #self.right_button_down = True
             self.ship.right = True
-            #print(datetime.datetime.now(), 'Begin', 'Right', touch.touch_id)
                     
         if self.shoot_button.frame.contains_point(touch.location):
-            #self.shoot_button_down = True
-            # print(datetime.datetime.now(), 'Begin', 'Shoot', touch.touch_id)
             self.ship.Shoot()
         
         if self.boost_button.frame.contains_point(touch.location):
-            #self.boost_button_down = True
-            #print(datetime.datetime.now(), 'Begin', 'Thrust', touch.touch_id)
-            self.ship.ThrustButton = True
-            #rint 'boosted'
+            self.ship.thrust_button = True
     
     def touch_moved(self, touch):
         # this method is called, when user moves a finger around on the screen
@@ -211,7 +202,7 @@ class GameScene(Scene):
     
     def touch_ended(self, touch):
         # this method is called, when user releases a finger from the screen
-        #print('End', '', touch.touch_id)
+
         if self.shoot_button.frame.contains_point(touch.location):
             #self.ship.Shoot()
             #print(datetime.datetime.now(), 'End', 'Shoot', touch.touch_id)
@@ -219,7 +210,7 @@ class GameScene(Scene):
             pass
         elif self.boost_button.frame.contains_point(touch.location):
             #print(datetime.datetime.now(), 'End', 'Thrust', touch.touch_id)
-            self.ship.ThrustButton = False
+            self.ship.thrust_button = False
             #pass
         else:
             # if I removed my finger, then no matter what spaceship
@@ -316,12 +307,12 @@ class GameScene(Scene):
                 break
     
     def hide_close(self, state=True):
-	    #Taken from omz forum - user robnee
-		#https://forum.omz-software.com/topic/3758/disable-stop-button-x-in-scene/5
+        #Taken from omz forum - user robnee
+        #https://forum.omz-software.com/topic/3758/disable-stop-button-x-in-scene/5
 		
-        from obj_util import ObjCInstance
+        from objc_util import ObjCInstance
         v = ObjCInstance(self.view)
         # Find close button.  I'm sure this is the worst way to do it
         for x in v.subviews():
-            if str(x.description()).find('UIButton) >= 0:
+            if str(x.description()).find('UIButton') >= 0:
                 x.setHidden(state)
