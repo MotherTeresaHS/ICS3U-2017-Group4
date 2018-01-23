@@ -19,7 +19,7 @@ from main_menu_scene import *
 class GameScene(Scene):
     def setup(self):
         # this method is called, when user moves to this scene
-        
+        self.hide_close(True)
         # this code was taken from Mr. Coxalls game_scene
         self.ship = SpaceShip(0, 150 , self.size.x, self.size.y-50)
         
@@ -315,3 +315,13 @@ class GameScene(Scene):
                     config.write(configfile)
                 break
     
+    def hide_close(self, state=True):
+	    #Taken from omz forum - user robnee
+		#https://forum.omz-software.com/topic/3758/disable-stop-button-x-in-scene/5
+		
+        from obj_util import ObjCInstance
+        v = ObjCInstance(self.view)
+        # Find close button.  I'm sure this is the worst way to do it
+        for x in v.subviews():
+            if str(x.description()).find('UIButton) >= 0:
+                x.setHidden(state)
