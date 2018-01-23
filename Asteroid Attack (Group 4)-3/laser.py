@@ -37,12 +37,12 @@ class Laser:
             
         self.sprite = None
         
-        self.scale_x = math.cos(math.radians(self.Angle))
-        self.scale_y = math.sin(math.radians(self.Angle)) 
+        self.scale_x = math.cos(math.radians(self.angle))
+        self.scale_y = math.sin(math.radians(self.angle)) 
         self.x_velocity = self.speed * self.scale_x 
         self.y_velocity = self.speed * self.scale_y 
         
-        #print('Missle', self.Angle, self.scale_x, self.scale_y, self.x_velocity, self.y_velocity)
+        #print('Missle', self.angle, self.scale_x, self.scale_y, self.x_velocity, self.y_velocity)
     
     def move(self):
         
