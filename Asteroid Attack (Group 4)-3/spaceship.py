@@ -1,7 +1,7 @@
 # Created by: Justin Bronson
 # Created on: Dec 2017
 # Created for: ICS3U
-# This scene runs the main game.
+# This scene controls the main space ship
 
 from scene import *
 import math
@@ -52,36 +52,30 @@ class SpaceShip:
         adjangle = 0
         
         if (self.thrust_button== True):
-                
-            #increase = self.sprite.scene.dt * float(self.acceleration)
+            
             #Turning Physics
             realangle = self.angle + 90
             if realangle > 360:
                 realangle -= 360
+
             oppangle = math.sin(math.radians(realangle)) 
             adjangle = math.cos(math.radians(realangle))
-            #wprint (realangle, oppangle, adjangle, self.x_velocity, self.y_velocity)
-            #* increase) * self.sprite.scene.dt.x_velocity += xmv
-            
+           
             self.x_velocity += increase * adjangle
             self.y_velocity += increase * oppangle 
                 
         else:
             # Deceleration Logic
+
             if self.x_velocity != 0:
+                #This allows us to slow down evenly in both directions
                 self.x_velocity -= ((self.x_velocity * self.deceleration_rate) * self.sprite.scene.dt)
-                #if self.x_velocity > 0:
-                #    self.x_velocity -= ((self.x_velocity * self.deceleration_rate) * self.sprite.scene.dt)
-                #else:
-                #    self.x_velocity -= ((self.x_velocity * self.deceleration_rate) * self.sprite.scene.dt)
             
             if self.y_velocity != 0:
+                #This allows us to slow down evenly in both directions
                 self.y_velocity -= ((self.y_velocity * self.deceleration_rate) * self.sprite.scene.dt)
-                #if self.y_velocity > 0:
-                #    self.y_velocity -= ((self.y_velocity * self.deceleration_rate) * self.sprite.scene.dt)
-                #else:
-                #    self.y_velocity -= ((self.y_velocity * self.deceleration_rate) * self.sprite.scene.dt)
-            
+
+            #Forces it to stop ones it slows down (Prevents jittering)
             if abs(self.x_velocity) < 0.1:
                 self.x_velocity = 0
             
@@ -99,12 +93,10 @@ class SpaceShip:
             self.y_velocity = self.max_speed
         elif (self.y_velocity < (self.max_speed * -1)):
             self.y_velocity = self.max_speed * -1
-        
-        #Thrustw/Speed display -- comment out when not debugging
-        #print (self.ThrustButton, self.x_velocity, self.y_velocity, self.angle, self.angle_shift, str(increase), oppangle, adjangle, self.sprite.position.x, self.sprite.position.y)
-        
+               
     def Rotate(self):
         should_rotate=False
+        
         if self.left == True:
            #Rotate ship to the left
            newangle = math.degrees((self.sprite.rotation + self.sensitivity) * 1)
@@ -113,7 +105,6 @@ class SpaceShip:
            should_rotate=True
         elif self.right == True:
            #Rotate ship to the right
-           #self.angle = math.degrees((self.sprite.rotation - self.sensitivity) * 1)
            newangle = math.degrees((self.sprite.rotation - self.sensitivity) * 1)
            self.angle_shift = self.angle - newangle
            self.angle = newangle
@@ -132,30 +123,32 @@ class SpaceShip:
             self.sprite.rotation = math.radians(self.angle)
         else:
             pass
-            #print('False', len(self.sprite.scene.touches))
         
     def Move(self):
+        # Object Move function 
         move_sprite = False
         xpos = float(0)
         ypos = float(0)
+        
         # Calculate Velocity
         if abs(self.x_velocity) > 0:
             move_sprite = True
-            xpos = (self.x_velocity)
+            xpos = self.x_velocity
         
         if abs(self.y_velocity) > 0:
             move_sprite = True
-            ypos = (self.y_velocity)
+            ypos = self.y_velocity
         
         #Should the ship move
         if self.sprite.position[0] < self.x1:
-            #Ship has moved off screen
+            #Ship has moved off left side of screen
             xpos = self.x2
             ypos = self.sprite.position[1]
             self.sprite.remove_all_actions()
             self.sprite.run_action(Action.move_to(xpos, ypos, 0))
             move_sprite = False
         elif self.sprite.position[0] > self.x2:
+            #Ship has moved off right side of screen
             xpos = self.x1
             ypos = self.sprite.position[1]
             self.sprite.remove_all_actions()
@@ -163,12 +156,14 @@ class SpaceShip:
             move_sprite = False
         
         if self.sprite.position[1] < self.y1:
+            #Ship has moved below screen
             ypos = self.y2
             xpos = self.sprite.position[0]
             self.sprite.remove_all_actions()
             self.sprite.run_action(Action.move_to(xpos, ypos, 0))
             move_sprite = False
         elif self.sprite.position[1] > self.y2:
+            #Ship has moved above screen
             ypos = self.y1
             xpos = self.sprite.position[0]
             self.sprite.remove_all_actions()
@@ -176,19 +171,21 @@ class SpaceShip:
             move_sprite = False
             
         if move_sprite == True:
+            #Sprite is still on the ship
             self.sprite.remove_all_actions()
             self.sprite.run_action(Action.move_by(xpos, ypos, 0))
-        
-        for item in self.lazers:
-            #self.lazer[len(self.lazer)-1]Move()
-            item.move()
-            if item.delete == True:
-                #item.remove_from_parent()
-                self.lazers.remove(item)
-                print ('ship lazers', len(self.lazers))
-                self.sprite.scene.score
+
+        #Move Laser Code
+        for laser in self.lazers:
+            #loop through laser list and move it
+            laser.move()
+            if laser.delete == True:
+                #Laser is marked for deletion (remove it)
+                self.lazers.remove(laser)
+                
         
     def Draw(self, parent, x , y):
+        #Draw sprite on screen
         self.sprite = SpriteNode(self.spriteFile,
                                      parent = parent,
                                      position = Vector2(x,y),
@@ -196,38 +193,17 @@ class SpaceShip:
     
     def Shoot(self):
         if self.destroyed == True:
-            return None
+               
+            # sound that is played when user hits the shoot button
+            sound.play_effect('./assets/sounds/laser1.wav')
             
-        # sound that is played when user hits the shoot button
-        sound.play_effect('./assets/sounds/laser1.wav')
-        
-        # when the user hits the fire button
-        lazer_start_position = self.sprite.position
-        
-        lazer_end_position = Vector2()
-        #print(self.angle)
-        lazer_end_position.y = math.sin(self.angle - math.pi / 2) * 500
-        lazer_end_position.x = math.cos(self.angle - - math.pi / 2) * 500
-        
-        
-        
-        #self.lazer.append(SpriteNode('./assets/sprites/missile.png',
-        #                     position = lazer_start_position,
-        #                     scale = 0.25,
-        #                     parent = self.sprite.scene))
-        
-        # make missile move forward
-        #lazer = Laser(self.x1, self.y1,self.x2,self.y2)
-        self.lazers.append(Laser(self.x1, self.y1,self.x2,self.y2, self.angle))
-        #lazer.Draw(self.sprite, self.sprite.position[0], self.sprite.position[1])
-        #lazerMoveAction = Action.move_by(lazer_end_position.x, 
-        #                                 lazer_end_position.y, 
-        #                                 5.0)
-        self.lazers[len(self.lazers)-1].draw(self.sprite.scene, self.sprite.position[0], self.sprite.position[1])
-        self.lazers[len(self.lazers)-1].sprite.rotation = self.sprite.rotation
-        self.lazers[len(self.lazers)-1].angle = self.angle
-        
-        #self.lazer[len(self.lazer)-1].UpdateTrajectory(10, self.angle)
-        #self.lazer[len(self.lazer)-1].y_velocity = self.y_velocity
-        #self.lazer[len(self.lazer)-1].sprite.run_action(lazerMoveAction)
+            # laser start position and angle is the same the ship position/angle
+            # Build and append laser to lasers list            
+            self.lazers.append(Laser(self.x1, self.y1,self.x2,self.y2, self.angle))
+
+            # Draw laser
+            self.lazers[len(self.lazers)-1].draw(self.sprite.scene, self.sprite.position[0], self.sprite.position[1])
+            #self.lazers[len(self.lazers)-1].sprite.rotation = self.sprite.rotation
+            #self.lazers[len(self.lazers)-1].angle = self.angle
+            
     
