@@ -96,5 +96,5 @@ class Laser:
         self.sprite = SpriteNode(self.sprite_file,
                                      parent = parent,
                                      position = Vector2(x,y),
-                                     scale  = self.spriteScale)
+                                     scale  = self.sprite_scale)
     
