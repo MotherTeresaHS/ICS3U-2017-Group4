@@ -93,7 +93,7 @@ class Laser:
             self.delete = True
         
     def draw(self, parent, x , y):
-        self.sprite = SpriteNode(self.spriteFile,
+        self.sprite = SpriteNode(self.sprite_file,
                                      parent = parent,
                                      position = Vector2(x,y),
                                      scale  = self.spriteScale)
