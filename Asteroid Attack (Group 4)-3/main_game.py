@@ -19,7 +19,7 @@ from main_menu_scene import *
 class GameScene(Scene):
     def setup(self):
         # this method is called, when user moves to this scene
-        self.hide_close(True)
+        #self.hide_close(True)
         # this code was taken from Mr. Coxalls game_scene
         self.ship = SpaceShip(0, 150 , self.size.x, self.size.y-50)
         
@@ -242,7 +242,7 @@ class GameScene(Scene):
 
         #Create the Asteroid and Append to the list
         self.asteroids.append(Asteroid(0, 150 , self.size.x, self.size.y - 50, asteroid_angle, 3))
-        self.asteroids[len(self.asteroids)-1].draw(self, asteroid_end_position.x, asteroid_end_position.y)
+        self.asteroids[len(self.asteroids)-1].draw(self, asteroid_start_position.x, asteroid_start_position.y)
      
         
     def asteroid_builder(self, impact_angle, position, size):
