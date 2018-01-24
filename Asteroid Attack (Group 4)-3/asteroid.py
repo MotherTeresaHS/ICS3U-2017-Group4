@@ -18,9 +18,9 @@ ASTEROID_NONE = ""
 
 #CONSTANTS FOR SIZES
 
-ASTEROID_LARGE = 1
+ASTEROID_LARGE = 3
 ASTEROID_MEDIUM = 2
-ASTEROID_SMALL = 3
+ASTEROID_SMALL = 1
 
 
 class Asteroid:
@@ -129,14 +129,14 @@ class Asteroid:
             self.sprite.run_action(Action.move_to(xpos, ypos, 0))
         
     def draw(self, parent, x , y):
-        if self.size == 3:
+        if self.size == ASTEROID_LARGE:
             #Large Asteroid (100%)
             scale = self.sprite_scale * 1
-        elif self.size == 2:
+        elif self.size == ASTEROID_MEDIUM:
             #Medim Asteroid (75%)
             scale = self.sprite_scale * 0.75
         else:
-            #Medim Asteroid (50%)
+            #Small Asteroid (50%)
             scale = self.sprite_scale * 0.5
         
         self.sprite = SpriteNode(self.sprite_file,

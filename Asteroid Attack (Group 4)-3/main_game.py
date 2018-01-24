@@ -152,7 +152,7 @@ class GameScene(Scene):
                     self.save_scores()
                 if len(self.ship.lazers) > 0:
                     #Check for collisions with lasers
-                    self.collision_detection()
+                    self.collision_detection(asteroid)
         else:
             pass
         
@@ -219,7 +219,7 @@ class GameScene(Scene):
         asteroid_angle += (random.randint(0,3) * 90 )
 
         #Create the Asteroid and Append to the list
-        self.asteroids.append(Asteroid(0, 150 , self.size.x, self.size.y - 50, asteroid_angle, 3, ASTEROID_NONE))
+        self.asteroids.append(Asteroid(0, 150 , self.size.x, self.size.y - 50, asteroid_angle, ASTEROID_LARGE, ASTEROID_NONE))
         self.asteroids[len(self.asteroids)-1].draw(self, asteroid_start_position.x, asteroid_start_position.y)
      
         
@@ -295,7 +295,7 @@ class GameScene(Scene):
         self.ship.destroyed = True
         self.ship.sprite.texture = None
 
-    def collision_detection(self):
+    def collision_detection(self, asteroid):
         #Loop through laser list
         for laser in self.ship.lazers:
             if asteroid.sprite.frame.intersects(laser.sprite.frame):
