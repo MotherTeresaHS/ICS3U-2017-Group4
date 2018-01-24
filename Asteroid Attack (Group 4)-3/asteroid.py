@@ -10,7 +10,10 @@ import sound
 import datetime
 from enum import *
 
-asteroid_colours = Enum('Brown','Grey','Red','None')
+ASTEROID_RED = "R"
+ASTEROID_GREY = "G"
+ASTEROID_BROWN = "B"
+ASTEROID_NONE = ""
 
 #ShipSize Enum('LARGE',  'MEDIUM', 'SMALL')
 
@@ -23,17 +26,21 @@ class Asteroid:
         
 
         #Colour
-        if colour == asteroid_colours.None :
+        if colour == ASTEROID_NONE :
             pick = random.randint(1,7)
             if pick == 1:
-                colour = asteroid_colours.Brown
-            elif pick == 1:
-                colour = asteroid_colours.Red
-                pick = random.randint(1,3)
-                self.sprite_file = './assets/sprites/G' + str(pick) + '.png'
+                colour == ASTEROID_BROWN
+            elif pick => 2 and pick <=4:
+               pick = random.randint(1,3)
+               colour == ASTEROID_GREY
             else:
-                colour = asteroid_colours.Grey
-                pick = random.randint(1,3)
+               pick = random.randint(1,3)
+               colour == ASTEROID_RED
+        elif colour == ASTEROID_BROWN:
+            pick = 1
+        else:
+            pick = random.randint(1,3)
+
         self.colour = colour
         self.sprite_file = './assets/sprites/' + str(colour)[:1] + str(pick) + '.png'
 
