@@ -27,24 +27,6 @@ class GameScene(Scene):
         self.asteroids = []
         self.asteroid_attack_rate = 1
         self.asteroid_attack_speed = 20.0
-
-        #Rate to build them
-        self.asteroid_attack_rate = 1
-
-        #Speed to deploy them at
-        self.asteroid_attack_speed = 20.0
-
-        #Min to start with
-        self.min_asteroids = 4
-
-        #Max the system will allow
-        self.max_asteroids = 30
-
-        #Current number being spawned
-        self.asteroid_count = 0
-
-        #Number spawned this wave
-        self.asteroids_built = 0
         
         self.size_of_screen_x = self.size.x
         self.size_of_screen_y = self.size.y
@@ -150,9 +132,11 @@ class GameScene(Scene):
             self.ship.move()
             self.ship.rotate()
             self.ship.thrust()
-
-        #Logic behing game difficulty        
-        self.game_controller()
+        
+        asteroid_create_chance = random.randint(1, 120)
+        if asteroid_create_chance <= self.asteroid_attack_rate:
+            if len(self.asteroids) < 10:
+                self.asteroid_generator()
         
         if self.ship.destroyed == True:
             if not self.presented_scene and time.time() - self.destroy_time > 3:
@@ -323,29 +307,6 @@ class GameScene(Scene):
         self.ship.destroyed = True
         self.ship.sprite.texture = None
 
-    def game_controller(self):
-        #Based on Mr.Coxall's generator
-        if len(self.asteroids) = 0:
-            #Player destroyed all the asteroids
-            self.asteroids_built = 0
-            
-            #increase difficulty
-            if self.asteroid_count < self.min_asteroids:
-                self.asteroid_count = self.min_asteroids
-            else
-                self.asteroid_count += self.asteroid_attack_rate
-
-            #max difficulty
-            if self.asteroid_count > self.max_asteroids:
-                self.asteroid_count = self.max_asteroids
-
-        if self.asteroids_built < self.asteroid_count:
-            #Build more until we have built all the asteroids
-            asteroid_create_chance = random.randint(1, 120)
-            if asteroid_create_chance <= self.asteroid_attack_rate:
-                self.asteroid_count += 1
-                self.asteroid_generator()
-        
     def collision_detection(self, asteroid):
         #Loop through laser list
         for laser in self.ship.lazers:
