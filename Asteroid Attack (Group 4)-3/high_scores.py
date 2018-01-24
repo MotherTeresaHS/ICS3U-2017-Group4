@@ -124,11 +124,11 @@ class HighScores(Scene):
 
         self.back_button.position = Vector2(75, self.size.y - 75)
         
-        self.first_place.position = Vector2(middle,  self.size.y - 200 )
-        self.second_place.position =  Vector2(middle, self.size.y - 275)
-        self.third_place.position = Vector2(middle, self.size.y - 350)
-        self.fourth_place.position =  Vector2(middle, self.size.y - 425)
-        self.fifth_place.position =  Vector2(middle, self.size.y - 500)
+        self.first_place.position = Vector2(middle,  self.size.y - 200 - padding)
+        self.second_place.position =  Vector2(middle, self.size.y - 275 - padding)
+        self.third_place.position = Vector2(middle, self.size.y - 350 - padding)
+        self.fourth_place.position =  Vector2(middle, self.size.y - 425 - padding)
+        self.fifth_place.position =  Vector2(middle, self.size.y - 500 - padding)
         
     def pause(self):
         # this method is called, when user touches the home button
