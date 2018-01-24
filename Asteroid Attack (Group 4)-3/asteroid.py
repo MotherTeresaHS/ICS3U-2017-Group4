@@ -30,7 +30,7 @@ class Asteroid:
             pick = random.randint(1,7)
             if pick == 1:
                 colour == ASTEROID_BROWN
-            elif pick => 2 and pick <=4:
+            elif pick >= 2 and pick <=4:
                pick = random.randint(1,3)
                colour == ASTEROID_GREY
             else:

@@ -242,7 +242,7 @@ class GameScene(Scene):
         asteroid_angle += (random.randint(0,3) * 90 )
 
         #Create the Asteroid and Append to the list
-        self.asteroids.append(Asteroid(0, 150 , self.size.x, self.size.y - 50, asteroid_angle, 3, asteroid_colours.None))
+        self.asteroids.append(Asteroid(0, 150 , self.size.x, self.size.y - 50, asteroid_angle, 3, ASTEROID_NONE))
         self.asteroids[len(self.asteroids)-1].draw(self, asteroid_start_position.x, asteroid_start_position.y)
      
         
