@@ -20,7 +20,7 @@ from main_menu_scene import *
 class GameScene(Scene):
     def setup(self):
         # this method is called, when user moves to this scene
-        self.hide_close(True)
+        #self.hide_close(True)
         # this code was taken from Mr. Coxalls game_scene
         self.ship = SpaceShip(0, 150 , self.size.x, self.size.y-50)
         
