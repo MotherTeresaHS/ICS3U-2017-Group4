@@ -107,12 +107,12 @@ class GameScene(Scene):
         boost_button_position = Vector2()
         boost_button_position.x = self.size_of_screen_x - 250
         boost_button_position.y = 75
-        self.boost_button = SpriteNode('./assets/sprites/red_button.png',
+        self.boost_button = SpriteNode('./assets/sprites/boost.png',
                                      parent = self,
                                      position = boost_button_position,
                                      alpha = 1,
                                      z_position = 2,
-                                     scale = self.scale_size)
+                                     scale = 0.35)
     
         score_position = Vector2()
         score_position.x = 50
@@ -146,10 +146,10 @@ class GameScene(Scene):
             for asteroid in self.asteroids:
                 asteroid.move()
                 if asteroid.sprite.frame.intersects(self.ship.sprite.frame) and self.ship.destroyed == False:
-                    asteroid_adjustment = int(self.asteroid.sprite.frame.w * 0.1)
+                    asteroid_adjustment = int(asteroid.sprite.frame.w * 0.25)
                     ship_adjustment = int(self.ship.sprite.frame.w * 0.1)
 
-                    ship_rect = self.asteroid.sprite.frame.inset(asteroid_adjustment,asteroid_adjustment)
+                    ship_rect = asteroid.sprite.frame.inset(asteroid_adjustment,asteroid_adjustment)
                     asteroid_rect = self.ship.sprite.frame.inset(ship_adjustment,ship_adjustment)
 
                     if ship_rect.intersects(asteroid_rect):
