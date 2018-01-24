@@ -40,25 +40,25 @@ class GameScene(Scene):
         self.score = 0
         
         # add borders to the screen
-        self.border1 = SpriteNode(position = Point(0,self.size.y ),
+        self.border1 = SpriteNode(position = Vector2(0,self.size.y ),
                                     #anchor_point = Point(0,1),
                                     z_position = 1.0,
                                     color = 'black', 
                                     parent = self,
                                     size = Size(self.size.x,45))
-        self.border2 = SpriteNode(position = Point(0,0 ),
+        self.border2 = SpriteNode(position = Vector2(0,0 ),
                                  #anchor_point = Point(0,0),
                                  z_position = 1.0,
                                  color = 'black', 
                                  parent = self,
                                  size = Size(self.size.x,140))
-        self.border3 = SpriteNode(position = Point(0,0 ),
+        self.border3 = SpriteNode(position = Vector2(0,0 ),
                                     #anchor_point = Point(0,0),
                                     z_position = 1.0,
                                     color = 'black', 
                                     parent = self,
                                     size = Size(12.5,self.size.y))
-        self.border4 = SpriteNode(position = Point(self.size.x - 12.5 ,0 ),
+        self.border4 = SpriteNode(position = Vector2(self.size.x - 12.5 ,0 ),
                                     #anchor_point = Point(0,0),
                                     z_position = 1.0,
                                     color = 'black', 
