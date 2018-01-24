@@ -207,7 +207,41 @@ class GameScene(Scene):
     def did_change_size(self):
         # this method is called, when user changes the orientation of the screen
         # thus changing the size of each dimension
-        pass
+
+        #copied from setup
+        self.size_of_screen_x = self.size.x
+        self.size_of_screen_y = self.size.y
+        self.screen_center_x = self.size_of_screen_x/2
+        self.screen_center_y = self.size_of_screen_y/2
+
+        background_position = Vector2(self.screen_center_x, self.screen_center_y)
+
+        self.bg.position = background_position
+        self.bg.size = self.size
+
+        boost_button_position = Vector2()
+        boost_button_position.x = self.size_of_screen_x - 250
+        boost_button_position.y = 75
+        self.boost_button.position = boost_button_position
+
+        shoot_button_position = Vector2()
+        shoot_button_position.x = self.size_of_screen_x - 100
+        shoot_button_position.y = 75
+        self.shoot_button.position = shoot_button_position
+
+        score_position = Vector2()
+        score_position.x = 50
+        score_position.y = self.size.y - 25
+        self.score_label.position = score_position
+
+        self.border1.position = Vector2(self.size_of_screen_x / 2, 70)
+        self.border1.size = Size(self.size.x, 140)
+        self.border2.position = Vector2(self.size_of_screen_x /2, self.size_of_screen_y - 22)
+        self.border2.size = Size(self.size.x, 45)
+        self.border3.position = Vector2(6, self.size_of_screen_y / 2)
+        self.border3.size = Size(12, self.size_of_screen_y)
+        self.border4.position = Vector2(self.size_of_screen_x - 6, self.size_of_screen_y / 2)
+        self.border4.size = Size(12, self.size_of_screen_y)        
     
     def pause(self):
         # this method is called, when user touches the home button
