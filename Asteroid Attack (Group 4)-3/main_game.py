@@ -67,7 +67,7 @@ class GameScene(Scene):
         # add background image
         background_position = Vector2(self.screen_center_x, 
                                       self.screen_center_y)
-        self.bg = SpriteNode('./assets/sprites/star_background.png',
+        self.bg = SpriteNode('./assets/sprites/Background1.jpg',
                                      position = background_position, 
                                      parent = self, 
                                      size = self.size)
