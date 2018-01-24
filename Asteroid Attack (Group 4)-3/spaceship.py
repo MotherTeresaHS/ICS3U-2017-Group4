@@ -60,7 +60,7 @@ class SpaceShip:
         adjangle = 0
         
         if (self.thrust_button== True):
-            sound.play_effect('./assets/sounds/thrust2.wav')
+           
             #Turning Physics
             realangle = self.angle + 90
             if realangle > 360:
@@ -73,9 +73,11 @@ class SpaceShip:
             self.y_velocity += increase * oppangle 
 
             #Show ship with thrusters
-            if self.spriteFile != self.idle_sprite and self.destroyed == False:
-                self.sprite.texture = self.thrust_texture
-                self.spriteFile = self.thrust_sprite
+            if self.destroyed == False:
+                sound.play_effect('./assets/sounds/thrust2.wav')
+                if self.spriteFile != self.thrust_sprite:
+                    self.sprite.texture = self.thrust_texture
+                    self.spriteFile = self.thrust_sprite
         else:
             # Deceleration Logic
 
