@@ -8,6 +8,7 @@ import math
 import random
 import sound
 import datetime
+from enum import *
 
 asteroid_colours = Enum('Brown','Grey','Red','None')
 
@@ -34,7 +35,7 @@ class Asteroid:
                 colour = asteroid_colours.Grey
                 pick = random.randint(1,3)
         self.colour = colour
-        self.sprite_file = './assets/sprites/' + colour[1:1] + str(pick) + '.png'
+        self.sprite_file = './assets/sprites/' + str(colour)[:1] + str(pick) + '.png'
 
         # Flight Boundary 
         self.x1=x1arg
