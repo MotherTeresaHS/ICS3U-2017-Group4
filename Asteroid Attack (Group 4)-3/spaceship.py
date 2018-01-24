@@ -192,7 +192,7 @@ class SpaceShip:
                                      scale  = self.spriteScale)
     
     def Shoot(self):
-        if self.destroyed == True:
+        if self.destroyed == False:
                
             # sound that is played when user hits the shoot button
             sound.play_effect('./assets/sounds/laser1.wav')
