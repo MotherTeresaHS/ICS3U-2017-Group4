@@ -178,7 +178,7 @@ class GameScene(Scene):
             self.ship.right = True
                     
         if self.shoot_button.frame.contains_point(touch.location):
-            self.ship.Shoot()
+            self.ship.shoot()
         
         if self.boost_button.frame.contains_point(touch.location):
             self.ship.thrust_button = True
