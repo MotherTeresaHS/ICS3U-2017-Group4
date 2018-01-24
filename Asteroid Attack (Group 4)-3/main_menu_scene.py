@@ -9,7 +9,6 @@ import ui
 from main_game import *
 from high_scores import *
 from credits import *
-from settings import *
 
 #self.present_modal_scene(MainMenuScene())
 
