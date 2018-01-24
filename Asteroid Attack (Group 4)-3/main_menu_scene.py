@@ -65,8 +65,8 @@ class MainMenuScene(Scene):
     def touch_ended(self, touch):
         # this method is called, when user releases a finger from the screen
         if self.start_button.frame.contains_point(touch.location):
-            #self.present_modal_scene(GameScene(),orientation=LANDSCAPE)
-            run(GameScene(),orientation = LANDSCAPE, show_fps = True, multi_touch = True)
+            self.present_modal_scene(GameScene())
+            #run(GameScene(),orientation = LANDSCAPE, show_fps = True, multi_touch = True)
         
         if self.scores_button.frame.contains_point(touch.location):
             self.present_modal_scene(HighScores())

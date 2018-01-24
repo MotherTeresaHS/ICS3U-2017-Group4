@@ -34,11 +34,10 @@ class HighScores(Scene):
         # create title label
         title_position = Vector2()
         title_position.x = middle
-        title_position.y = self.size.y - 50
+        title_position.y = self.size.y - 125
         self.title = SpriteNode('./assets/sprites/HISCORE2.png',
                                      parent = self,
                                      position = title_position,
-                                     anchor_point = Point(0.5, 1.0),
                                      scale = 1.5)   
 
         back_button_position = self.size
