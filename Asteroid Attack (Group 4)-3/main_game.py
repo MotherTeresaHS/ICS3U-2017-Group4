@@ -146,37 +146,13 @@ class GameScene(Scene):
             for asteroid in self.asteroids:
                 asteroid.move()
                 if asteroid.sprite.frame.intersects(self.ship.sprite.frame) and self.ship.destroyed == False:
-                    sound.play_effect('./assets/sounds/boom.wav')
+                    #Game Over
+                    self.game_over()
+                    #Save Scores
                     self.save_scores()
-                    text_position = Vector2()
-                    text_position.x = self.size.x/2
-                    text_position.y = self.size.y/2
-                    self.game_over = LabelNode(text = ('GAME OVER'),
-                                               font = ('Helvetica', 140),
-                                               parent = self,
-                                               position = text_position,
-                                               scale = 1)
-                    self.destroy_time = time.time()
-                    self.ship.destroyed = True
-                    self.ship.sprite.texture = None
                 if len(self.ship.lazers) > 0:
-                    for laser in self.ship.lazers:
-                        if asteroid.sprite.frame.intersects(laser.sprite.frame):
-                            if asteroid.size > 1:
-                                self.asteroid_builder(laser.angle, asteroid.sprite.position, asteroid.size - 1, asteroid.colour)
-                                self.asteroid_builder(laser.angle, asteroid.sprite.position, asteroid.size - 1, asteroid.colour)
-                            if asteroid.size == 3:
-                                self.score += 99
-                            elif asteroid.size == 2:
-                                self.score += 199
-                            else:
-                                self.score += 499
-                            self.score_label.text = ('SCORE: ' + str(self.score))
-                            laser.sprite.remove_from_parent()
-                            self.ship.lazers.remove(laser)
-                            asteroid.sprite.remove_from_parent()
-                            self.asteroids.remove(asteroid)
-                            
+                    #Check for collisions with lasers
+                    self.collision_detection()
         else:
             pass
         
@@ -296,3 +272,52 @@ class GameScene(Scene):
         for x in v.subviews():
             if str(x.description()).find('UIButton') >= 0:
                 x.setHidden(state)
+
+    def game_over(self):
+        #Game is over play boom
+        sound.play_effect('./assets/sounds/boom.wav')
+
+        #Show the Game over text
+        
+        text_position = Vector2()
+        text_position.x = self.size.x/2
+        text_position.y = self.size.y/2
+        self.game_over = LabelNode(text = ('GAME OVER'),
+                                            font = ('Helvetica', 140),
+                                            parent = self,
+                                            position = text_position,
+                                            scale = 1)
+
+        #Timer to auto close screen
+        self.destroy_time = time.time()
+
+        #Update the shipe information
+        self.ship.destroyed = True
+        self.ship.sprite.texture = None
+
+    def collision_detection(self):
+        #Loop through laser list
+        for laser in self.ship.lazers:
+            if asteroid.sprite.frame.intersects(laser.sprite.frame):
+                #Asteroid has intersected a laser
+                if asteroid.size > ASTEROID_SMALL:
+                    self.asteroid_builder(laser.angle, asteroid.sprite.position, asteroid.size - 1, asteroid.colour)
+                    self.asteroid_builder(laser.angle, asteroid.sprite.position, asteroid.size - 1, asteroid.colour)
+                if asteroid.size == ASTEROID_LARGE:
+                    self.score += 99
+                elif asteroid.size == ASTEROID_MEDIUM:
+                    self.score += 199
+                else:
+                    # SMALL
+                    self.score += 499
+
+                #Update the score label
+                self.score_label.text = ('SCORE: ' + str(self.score))
+
+                #Remove the laser from the scene and list
+                laser.sprite.remove_from_parent()
+                self.ship.lazers.remove(laser)
+
+                #Remove the asteroid from the scene and list
+                asteroid.sprite.remove_from_parent()
+                self.asteroids.remove(asteroid)

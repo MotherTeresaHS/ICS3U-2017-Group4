@@ -8,7 +8,6 @@ import math
 import random
 import sound
 import datetime
-from enum import *
 
 #CONSTANTS FOR COLOURS
 
@@ -17,7 +16,12 @@ ASTEROID_GREY = "G"
 ASTEROID_BROWN = "B"
 ASTEROID_NONE = ""
 
-#ShipSize Enum('LARGE',  'MEDIUM', 'SMALL')
+#CONSTANTS FOR SIZES
+
+ASTEROID_LARGE = 1
+ASTEROID_MEDIUM = 2
+ASTEROID_SMALL = 3
+
 
 class Asteroid:
     
