@@ -42,17 +42,25 @@ class SpaceShip:
         self.lazers = []
         self.sprite = None
         self.spriteScale = 0.075
-        self.spriteFile = './assets/sprites/SHIP3a.png'
+
+        #Ship Sprites and Textures
+        self.thrust_sprite = './assets/sprites/SHIP3B.png'
+        self.idle_sprite = './assets/sprites/SHIP3a.png'
+        self.spriteFile = self.idle_sprite
+
+        self.thrust_texture  = Texture(self.thrust_sprite)
+        self.idle_texture = Texture(self.idle_sprite)
+        
         
     
-    def Thrust(self):
+    def thrust(self):
         #Logic to control ship thrust and speed
         increase = self.sprite.scene.dt * self.acceleration
         oppangle = 0
         adjangle = 0
         
         if (self.thrust_button== True):
-            
+            sound.play_effect('./assets/sounds/thrust2.wav')
             #Turning Physics
             realangle = self.angle + 90
             if realangle > 360:
@@ -63,9 +71,18 @@ class SpaceShip:
            
             self.x_velocity += increase * adjangle
             self.y_velocity += increase * oppangle 
-                
+
+            #Show ship with thrusters
+            if self.spriteFile != self.idle_sprite and self.destroyed == False:
+                self.sprite.texture = self.thrust_texture
+                self.spriteFile = self.thrust_sprite
         else:
             # Deceleration Logic
+
+            #Show ship without thrusters if its not the current sprite
+            if self.spriteFile != self.idle_sprite and self.destroyed == False:
+                self.sprite.texture = self.idle_texture
+                self.spriteFile = self.idle_sprite
 
             if self.x_velocity != 0:
                 #This allows us to slow down evenly in both directions
@@ -94,7 +111,7 @@ class SpaceShip:
         elif (self.y_velocity < (self.max_speed * -1)):
             self.y_velocity = self.max_speed * -1
                
-    def Rotate(self):
+    def rotate(self):
         should_rotate=False
         
         if self.left == True:
@@ -124,7 +141,7 @@ class SpaceShip:
         else:
             pass
         
-    def Move(self):
+    def move(self):
         # Object Move function 
         move_sprite = False
         xpos = float(0)
@@ -184,14 +201,14 @@ class SpaceShip:
                 self.lazers.remove(laser)
                 
         
-    def Draw(self, parent, x , y):
+    def draw(self, parent, x , y):
         #Draw sprite on screen
         self.sprite = SpriteNode(self.spriteFile,
                                      parent = parent,
                                      position = Vector2(x,y),
                                      scale  = self.spriteScale)
     
-    def Shoot(self):
+    def shoot(self):
         if self.destroyed == False:
                
             # sound that is played when user hits the shoot button

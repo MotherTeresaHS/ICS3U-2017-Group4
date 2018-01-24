@@ -124,12 +124,12 @@ class GameScene(Scene):
                                       z_position = 2,
                                       scale = 0.75)
     
-        self.ship.Draw(self, self.size_of_screen_x / 2, self.size_of_screen_y / 2)
+        self.ship.draw(self, self.size_of_screen_x / 2, self.size_of_screen_y / 2)
         
     def update(self):
         
         if self.ship != None:
-            self.ship.Move()
+            self.ship.move()
             self.ship.Rotate()
             self.ship.Thrust()
         
