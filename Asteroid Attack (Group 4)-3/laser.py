@@ -5,7 +5,7 @@
 
 from scene import *
 import math
-import spaceobj
+from  spaceobj impoart *
 import sound
 import datetime
 from main_game import *

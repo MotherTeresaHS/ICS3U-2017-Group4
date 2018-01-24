@@ -9,12 +9,12 @@ import sound
 import datetime
 
 
-class SpaceObject:
+class SpaceObject(object):
     
     def __init__(self, x1arg, y1arg, x2arg, y2arg, xAngle, size):
 
         #Sprite Properties
-        self.sprite_scale = 1
+        self.sprite_scale = 1.0
         self.sprite_file = ''
         self.sprite = None
 
@@ -97,7 +97,7 @@ class SpaceObject:
         self.sprite = SpriteNode(self.sprite_file,
                                      parent = parent,
                                      position = Vector2(x,y),
-                                     scale = scale)
+                                     scale = self.sprite_scale)
         
        
     
