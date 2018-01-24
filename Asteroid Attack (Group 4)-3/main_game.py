@@ -40,30 +40,31 @@ class GameScene(Scene):
         self.score = 0
         
         # add borders to the screen
-        #self.border1 = SpriteNode(position = Vector2(0,self.size.y ),
-        #                            #anchor_point = Point(0,1),
-        #                           z_position = 1.0,
-        #                            color = 'black', 
-        #                            parent = self,
-        #                            size = Size(self.size.x,45))
-        #self.border2 = SpriteNode(position = Vector2(0,0 ),
-        #                         #anchor_point = Point(0,0),
-        #                         z_position = 1.0,
-        #                         color = 'black', 
-        #                         parent = self,
-        #                         size = Size(self.size.x,140))
-        #self.border3 = SpriteNode(position = Vector2(0,0 ),
-        #                            #anchor_point = Point(0,0),
-        #                            z_position = 1.0,
-        #                            color = 'black', 
-        #                            parent = self,
-        #                            size = Size(12.5,self.size.y))
-        #self.border4 = SpriteNode(position = Vector2(self.size.x - 12.5 ,0 ),
-        #                            #anchor_point = Point(0,0),
-        #                            z_position = 1.0,
-        #                            color = 'black', 
-        #                            parent = self,
-        #                            size = Size(12.5,self.size.y))
+        self.border1 = SpriteNode(position = Vector2(self.size_of_screen_x / 2, 70),
+                                    #anchor_point = Point(0,1),
+                                    z_position = 1.0,
+                                    color = 'black', 
+                                      parent = self,
+                                    size = Size(self.size.x,140))
+        
+        self.border2 = SpriteNode(position = Vector2(self.size_of_screen_x /2  , self.size_of_screen_y - 22),
+                                 #anchor_point = Point(0,0),
+                                  z_position = 1.0,
+                                  color = 'black', 
+                                  parent = self,
+                                  size = Size(self.size.x, 45))
+        self.border3 = SpriteNode(position = Vector2(6,self.size_of_screen_y / 2 ),
+                                    #anchor_point = Point(0,0),
+                                    z_position = 1.0,
+                                    color = 'black', 
+                                    parent = self,
+                                    size = Size(12,self.size_of_screen_y ))
+        self.border4 = SpriteNode(position = Vector2(self.size_of_screen_x - 6 , self.size_of_screen_y / 2),
+                                    #anchor_point = Point(0,0),
+                                    z_position = 1.0,
+                                    color = 'black', 
+                                    parent = self,
+                                    size = Size(12,self.size_of_screen_y))
         
         # add background image
         background_position = Vector2(self.screen_center_x, 
@@ -85,7 +86,7 @@ class GameScene(Scene):
                                      scale = self.scale_size)
         
         right_button_position = Vector2()
-        right_button_position.x = self.size_of_screen_x - 774
+        right_button_position.x = 250
         right_button_position.y = 75
         self.right_button = SpriteNode('./assets/sprites/right.png',
                                      parent = self,
@@ -95,7 +96,7 @@ class GameScene(Scene):
                                      scale = 0.25)
     
         left_button_position = Vector2()
-        left_button_position.x = self.size_of_screen_x - 924
+        left_button_position.x = 100
         left_button_position.y = 75
         self.left_button = SpriteNode('./assets/sprites/left.png',
                                      parent = self,
