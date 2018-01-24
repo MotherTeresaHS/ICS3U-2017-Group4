@@ -2,20 +2,19 @@
 # Created on: Dec 2017
 # Created for: ICS3U
 # This object is the base class for all space objects
+# Attempting to use inheritance
 
 from scene import *
 import math
 import sound
 import datetime
 
-
-class SpaceObject(object):
+class SpaceObject:
     
     def __init__(self, x1arg, y1arg, x2arg, y2arg, xAngle, size):
-
         #Sprite Properties
-        self.sprite_scale = 1.0
-        self.sprite_file = ''
+        sprite_scale = 1
+        sprite_file = ''
         self.sprite = None
 
         # Flight Boundary 
@@ -97,7 +96,7 @@ class SpaceObject(object):
         self.sprite = SpriteNode(self.sprite_file,
                                      parent = parent,
                                      position = Vector2(x,y),
-                                     scale = self.sprite_scale)
+                                     scale = scale)
         
        
     
