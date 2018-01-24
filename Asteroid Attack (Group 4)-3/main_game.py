@@ -4,6 +4,7 @@
 # This scene runs the main game.
 
 from scene import *
+from common import *
 import ui
 import math
 import datetime
@@ -19,9 +20,9 @@ from main_menu_scene import *
 class GameScene(Scene):
     def setup(self):
         # this method is called, when user moves to this scene
-        
+        self.hide_close(True)
         # this code was taken from Mr. Coxalls game_scene
-        self.Ship = SpaceShip(0, 150 , self.size.x, self.size.y-50)
+        self.ship = SpaceShip(0, 150 , self.size.x, self.size.y-50)
         
         self.asteroids = []
         self.asteroid_attack_rate = 1
@@ -67,7 +68,7 @@ class GameScene(Scene):
         # add background image
         background_position = Vector2(self.screen_center_x, 
                                       self.screen_center_y)
-        self.bg = SpriteNode('./assets/sprites/star_background.png',
+        self.bg = SpriteNode(random_background(),
                                      position = background_position, 
                                      parent = self, 
                                      size = self.size)
@@ -106,12 +107,12 @@ class GameScene(Scene):
         boost_button_position = Vector2()
         boost_button_position.x = self.size_of_screen_x - 250
         boost_button_position.y = 75
-        self.boost_button = SpriteNode('./assets/sprites/red_button.png',
+        self.boost_button = SpriteNode('./assets/sprites/boost.png',
                                      parent = self,
                                      position = boost_button_position,
                                      alpha = 1,
                                      z_position = 2,
-                                     scale = self.scale_size)
+                                     scale = 0.35)
     
         score_position = Vector2()
         score_position.x = 50
@@ -123,87 +124,64 @@ class GameScene(Scene):
                                       z_position = 2,
                                       scale = 0.75)
     
-        self.Ship.Draw(self, self.size_of_screen_x / 2, self.size_of_screen_y / 2)
+        self.ship.draw(self, self.size_of_screen_x / 2, self.size_of_screen_y / 2)
         
     def update(self):
         
-        if self.Ship != None:
-            self.Ship.Move()
-            self.Ship.Rotate()
-            self.Ship.Thrust()
+        if self.ship != None:
+            self.ship.move()
+            self.ship.rotate()
+            self.ship.thrust()
         
         asteroid_create_chance = random.randint(1, 120)
         if asteroid_create_chance <= self.asteroid_attack_rate:
             if len(self.asteroids) < 10:
                 self.asteroid_generator()
         
-        if self.Ship.destoryed == True:
+        if self.ship.destroyed == True:
             if not self.presented_scene and time.time() - self.destroy_time > 3:
                 self.view.close()
         
         if len(self.asteroids) > 0:
             for asteroid in self.asteroids:
-                #print('asteroid', asteroid.frame)
                 asteroid.move()
-                if asteroid.Sprite.frame.intersects(self.Ship.Sprite.frame) and self.Ship.destoryed == False:
-                    self.save_scores()
-                    text_position = Vector2()
-                    text_position.x = self.size.x/2
-                    text_position.y = self.size.y/2
-                    self.game_over = LabelNode(text = ('GAME OVER'),
-                                               font = ('Helvetica', 140),
-                                               parent = self,
-                                               position = text_position,
-                                               scale = 1)
-                    self.destroy_time = time.time()
-                    self.Ship.destoryed = True
-                    self.Ship.Sprite.texture = None
-                if len(self.Ship.lazers) > 0:
-                    for lazerr in self.Ship.lazers:
-                        #print ('lazer', lazerr.Sprite.frame, lazerr.Sprite.position)
-                        #print ('lazer', asteroid.frame , lazerr.Sprite.position)
-                        if asteroid.Sprite.frame.intersects(lazerr.Sprite.frame):
-                            if asteroid.size > 1:
-                                self.asteroid_builder(lazerr.Angle, asteroid.Sprite.position, asteroid.size - 1)
-                                self.asteroid_builder(lazerr.Angle, asteroid.Sprite.position, asteroid.size - 1)
-                            if asteroid.size == 3:
-                                self.score += 99
-                            elif asteroid.size == 2:
-                                self.score += 199
-                            else:
-                                self.score += 499
-                            self.score_label.text = ('SCORE: ' + str(self.score))
-                            lazerr.Sprite.remove_from_parent()
-                            self.Ship.lazers.remove(lazerr)
-                            asteroid.Sprite.remove_from_parent()
-                            self.asteroids.remove(asteroid)
-                            
+                if asteroid.sprite.frame.intersects(self.ship.sprite.frame) and self.ship.destroyed == False:
+                    #Were close to the asteroid, need to see how close
+
+                    #Creat a second rect inside the frame, adjusted by a percentage
+                    asteroid_adjustment = int(asteroid.sprite.frame.w * 0.25)
+                    ship_adjustment = int(self.ship.sprite.frame.w * 0.1)
+
+                    #Check if the smaller rect intersected, if so game over
+                    ship_rect = asteroid.sprite.frame.inset(asteroid_adjustment,asteroid_adjustment)
+                    asteroid_rect = self.ship.sprite.frame.inset(ship_adjustment,ship_adjustment)
+
+                    if ship_rect.intersects(asteroid_rect):
+                        #Game Over
+                        self.game_over()
+                        #Save Scores
+                        self.save_scores()
+                        
+                if len(self.ship.lazers) > 0:
+                    #Check for collisions with lasers
+                    self.collision_detection(asteroid)
         else:
             pass
         
     def touch_began(self, touch):
         # this method is called, when user touches the screen
-        
+
         if self.left_button.frame.contains_point(touch.location):
-            #self.left_button_down = True
-            self.Ship.Left = True
-            #print(datetime.datetime.now(), 'Begin', 'Left', touch.touch_id)
+            self.ship.left = True
          
         if self.right_button.frame.contains_point(touch.location):
-            #self.right_button_down = True
-            self.Ship.Right = True
-            #print(datetime.datetime.now(), 'Begin', 'Right', touch.touch_id)
+            self.ship.right = True
                     
         if self.shoot_button.frame.contains_point(touch.location):
-            #self.shoot_button_down = True
-            # print(datetime.datetime.now(), 'Begin', 'Shoot', touch.touch_id)
-            self.Ship.Shoot()
+            self.ship.shoot()
         
         if self.boost_button.frame.contains_point(touch.location):
-            #self.boost_button_down = True
-            #print(datetime.datetime.now(), 'Begin', 'Thrust', touch.touch_id)
-            self.Ship.ThrustButton = True
-            #rint 'boosted'
+            self.ship.thrust_button = True
     
     def touch_moved(self, touch):
         # this method is called, when user moves a finger around on the screen
@@ -211,22 +189,19 @@ class GameScene(Scene):
     
     def touch_ended(self, touch):
         # this method is called, when user releases a finger from the screen
-        #print('End', '', touch.touch_id)
+
         if self.shoot_button.frame.contains_point(touch.location):
-            #self.Ship.Shoot()
-            #print(datetime.datetime.now(), 'End', 'Shoot', touch.touch_id)
-            #self.create_new_missile()
+            #Place holder so that the else statement works
+            #without it, the rotation will stop during the shoot button release
             pass
         elif self.boost_button.frame.contains_point(touch.location):
-            #print(datetime.datetime.now(), 'End', 'Thrust', touch.touch_id)
-            self.Ship.ThrustButton = False
+            #Boost/Thrust button released
+            self.ship.thrust_button = False
             #pass
         else:
-            # if I removed my finger, then no matter what spaceship
-            #    should not be moving any more
-            #print(datetime.datetime.now(), 'End', 'Rotate', touch.touch_id)
-            self.Ship.Left = False
-            self.Ship.Right = False
+            #Else we assume the they let their finger of the rotate controls.
+            self.ship.left = False
+            self.ship.right = False
     
     def did_change_size(self):
         # this method is called, when user changes the orientation of the screen
@@ -245,49 +220,39 @@ class GameScene(Scene):
         pass
     
     def asteroid_generator(self):
+
+        #Create a random location to spawn the asteroid
         asteroid_start_position = Vector2()
-        asteroid_start_position.x = random.randint(100, self.size_of_screen_x - 300)
-        asteroid_start_position.y = self.size_of_screen_y + 300
-        
-        asteroid_end_position = Vector2()
-        asteroid_end_position.x = random.randint(0, self.size_of_screen_y)
-        asteroid_end_position.y = self.size_of_screen_y + 200
-        
+        asteroid_start_position.x = random.randint(0, self.size_of_screen_y)
+        asteroid_start_position.y = self.size_of_screen_y + 200
+
+        #Generate a Random angle but not one that is in a straight line. i.e. 90/180, etc
         asteroid_angle = random.randint(1, 89)
         asteroid_angle += (random.randint(0,3) * 90 )
+
+        #Create the Asteroid and Append to the list
+        self.asteroids.append(Asteroid(0, 150 , self.size.x, self.size.y - 50, asteroid_angle, ASTEROID_LARGE, ASTEROID_NONE))
+        self.asteroids[len(self.asteroids)-1].draw(self, asteroid_start_position.x, asteroid_start_position.y)
+     
         
-        self.asteroids.append(Asteroid(0, 150 , self.size.x, self.size.y-50, asteroid_angle, 3))
-        
-        self.asteroids[len(self.asteroids)-1].draw(self, asteroid_end_position.x, asteroid_end_position.y)
-        #self.asteroids[len(self.asteroids)-1].Sprite.rotation = 
-        self.asteroids[len(self.asteroids)-1].Angle = asteroid_angle
-        
-        # make missile move forward
-        asteroidMoveAction = Action.move_to(asteroid_end_position.x, 
-                                            asteroid_end_position.y, 
-                                            self.asteroid_attack_speed,
-                                            TIMING_SINODIAL)
-        self.asteroids[len(self.asteroids)-1].Sprite.run_action(asteroidMoveAction)
-        
-    def asteroid_builder(self, impact_angle, position, size):
+    def asteroid_builder(self, impact_angle, position, size, colour):
+
+        #Similar to the generator, but builds a new version at a specified location
+        #Used for asteroid splitting.
+
+        #Convert angle to a integer
         impact_angle = int(impact_angle)
+
+        #Calculate the Min and Max Angles of Deflection
         min_angle = impact_angle - 45
         max_angle = impact_angle + 45
-        print ('angle', impact_angle, min_angle, max_angle)
+
+        #Generate deflection angle
         asteroid_angle = random.randint(min_angle, max_angle)
-        
-        self.asteroids.append(Asteroid(0, 150 , self.size.x, self.size.y-50, asteroid_angle, size))
-        
+
+        #Create the Asteroid and Append to the list
+        self.asteroids.append(Asteroid(0, 150 , self.size.x, self.size.y-50, asteroid_angle, size, colour))
         self.asteroids[len(self.asteroids)-1].draw(self, position.x, position.y)
-        #self.asteroids[len(self.asteroids)-1].Sprite.rotation = 
-        self.asteroids[len(self.asteroids)-1].Angle = asteroid_angle
-        
-        # make missile move forward
-        asteroidMoveAction = Action.move_to(position.x, 
-                                            position.y, 
-                                            self.asteroid_attack_speed,
-                                            TIMING_SINODIAL)
-        self.asteroids[len(self.asteroids)-1].Sprite.run_action(asteroidMoveAction)
         
     def save_scores(self):
     	
@@ -303,14 +268,68 @@ class GameScene(Scene):
                     previous_score = config.get('Scores', 'Score' + str(i - 1), self.score)
                     config.set('Scores', 'Score' + str(i), previous_score)
                 config.set('Scores', 'Score' + str(x), self.score)
-                #config.set('Scores','score' + str(x), self.score)
-                #for y in range(5, x, -1):
-                    #print x, y
-                    #if y >= 2:
-                        #higher_score = config.get(config.get('Scores','score' + str(y -  1),'0'))
-                        #config.set('Scores','score' + str(y), higher_score)
-                #config.set('Scores','score' + str(y + 1), next_score)
+
+                #Save the config file
                 with open('./config.txt', 'w') as configfile:
                     config.write(configfile)
                 break
     
+    def hide_close(self, state=True):
+        #Taken from omz forum - user robnee
+        #https://forum.omz-software.com/topic/3758/disable-stop-button-x-in-scene/5
+		
+        from objc_util import ObjCInstance
+        v = ObjCInstance(self.view)
+        # Find close button.  I'm sure this is the worst way to do it
+        for x in v.subviews():
+            if str(x.description()).find('UIButton') >= 0:
+                x.setHidden(state)
+
+    def game_over(self):
+        #Game is over play boom
+        sound.play_effect('./assets/sounds/boom.wav')
+
+        #Show the Game over text
+        
+        text_position = Vector2()
+        text_position.x = self.size.x/2
+        text_position.y = self.size.y/2
+        self.game_over = LabelNode(text = ('GAME OVER'),
+                                            font = ('Helvetica', 140),
+                                            parent = self,
+                                            position = text_position,
+                                            scale = 1)
+
+        #Timer to auto close screen
+        self.destroy_time = time.time()
+
+        #Update the shipe information
+        self.ship.destroyed = True
+        self.ship.sprite.texture = None
+
+    def collision_detection(self, asteroid):
+        #Loop through laser list
+        for laser in self.ship.lazers:
+            if asteroid.sprite.frame.intersects(laser.sprite.frame):
+                #Asteroid has intersected a laser
+                if asteroid.size > ASTEROID_SMALL:
+                    self.asteroid_builder(laser.angle, asteroid.sprite.position, asteroid.size - 1, asteroid.colour)
+                    self.asteroid_builder(laser.angle, asteroid.sprite.position, asteroid.size - 1, asteroid.colour)
+                if asteroid.size == ASTEROID_LARGE:
+                    self.score += 99
+                elif asteroid.size == ASTEROID_MEDIUM:
+                    self.score += 199
+                else:
+                    # SMALL
+                    self.score += 499
+
+                #Update the score label
+                self.score_label.text = ('SCORE: ' + str(self.score))
+
+                #Remove the laser from the scene and list
+                laser.sprite.remove_from_parent()
+                self.ship.lazers.remove(laser)
+
+                #Remove the asteroid from the scene and list
+                asteroid.sprite.remove_from_parent()
+                self.asteroids.remove(asteroid)
