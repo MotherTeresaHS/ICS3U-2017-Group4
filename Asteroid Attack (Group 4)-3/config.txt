@@ -2,11 +2,11 @@
 sensitivity = 234
 
 [Scores]
-score1 = 64315
-score2 = 31808
-score3 = 22432
-score4 = 7876
-score5 = 3686
+score1 = 0
+score2 = 0
+score3 = 0
+score4 = 0
+score5 = 0
 
 [Credits]
 credit1 = Created by: Justin Bronson
