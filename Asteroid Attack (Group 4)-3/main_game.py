@@ -328,8 +328,17 @@ class GameScene(Scene):
 
                 #Remove the laser from the scene and list
                 laser.sprite.remove_from_parent()
-                self.ship.lazers.remove(laser)
+
+                try:
+                    self.ship.lazers.remove(laser)
+                except:
+                    #Related to Sceneview vs run event
+                    pass
 
                 #Remove the asteroid from the scene and list
                 asteroid.sprite.remove_from_parent()
-                self.asteroids.remove(asteroid)
+                try:
+                    self.asteroids.remove(asteroid)
+                except:
+                    #Related to Sceneview vs run event
+                    pass
