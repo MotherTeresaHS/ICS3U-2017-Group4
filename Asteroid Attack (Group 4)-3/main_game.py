@@ -146,10 +146,18 @@ class GameScene(Scene):
             for asteroid in self.asteroids:
                 asteroid.move()
                 if asteroid.sprite.frame.intersects(self.ship.sprite.frame) and self.ship.destroyed == False:
-                    #Game Over
-                    self.game_over()
-                    #Save Scores
-                    self.save_scores()
+                    asteroid_adjustment = int(self.asteroid.sprite.frame.w * 0.1)
+                    ship_adjustment = int(self.ship.sprite.frame.w * 0.1)
+
+                    ship_rect = self.asteroid.sprite.frame.inset(asteroid_adjustment,asteroid_adjustment)
+                    asteroid_rect = self.ship.sprite.frame.inset(ship_adjustment,ship_adjustment)
+
+                    if ship_rect.intersects(asteroid_rect):
+                        #Game Over
+                        self.game_over()
+                        #Save Scores
+                        self.save_scores()
+                        
                 if len(self.ship.lazers) > 0:
                     #Check for collisions with lasers
                     self.collision_detection(asteroid)
