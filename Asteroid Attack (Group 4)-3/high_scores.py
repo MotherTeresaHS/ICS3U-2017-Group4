@@ -6,7 +6,7 @@
 from scene import *
 import ui
 import ConfigParser, os
-
+from common import *
 from main_menu_scene import *
 
 class HighScores(Scene):
@@ -28,7 +28,6 @@ class HighScores(Scene):
         # add background image
         self.background = SpriteNode(random_background(),
                                      position = self.size / 2,
-                                     color = 'black',
                                      parent = self,
                                      size = self.size)
 

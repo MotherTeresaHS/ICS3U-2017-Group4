@@ -4,7 +4,7 @@
 # This scene runs the main game.
 
 from scene import *
-import common
+from common import *
 import ui
 import math
 import datetime

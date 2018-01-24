@@ -5,7 +5,7 @@
 
 from scene import *
 import ui
-
+from common import *
 from main_menu_scene import *
 
 class Credits(Scene):
@@ -29,8 +29,8 @@ class Credits(Scene):
         credit8 = (config.get('Credits','Credit8','0'))
         
         # add background color
-        self.background = SpriteNode(position = self.size / 2, 
-                                     color = 'blue', 
+        self.background = SpriteNode(random_background(),
+                                     position = self.size / 2, 
                                      parent = self, 
                                      size = self.size)
     
