@@ -10,6 +10,8 @@ import sound
 import datetime
 from enum import *
 
+#CONSTANTS FOR COLOURS
+
 ASTEROID_RED = "R"
 ASTEROID_GREY = "G"
 ASTEROID_BROWN = "B"
