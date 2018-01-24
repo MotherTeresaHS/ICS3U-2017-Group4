@@ -55,7 +55,16 @@ class Credits(Scene):
     def did_change_size(self):
         # this method is called, when user changes the orientation of the screen
         # thus changing the size of each dimension
-        self.setup()
+
+        self.background.position = self.size/2
+        self.background.size = self.size
+
+        self.credits_label.position = self.size/2
+
+        back_button_position = self.size
+        back_button_position.x = 75
+        back_button_position.y = self.size.y - 75
+        self.back_button.position = back_button_position
     
     def pause(self):
         # this method is called, when user touches the home button

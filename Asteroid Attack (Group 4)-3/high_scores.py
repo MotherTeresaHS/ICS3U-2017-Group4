@@ -114,8 +114,22 @@ class HighScores(Scene):
     def did_change_size(self):
         # this method is called, when user changes the orientation of the screen
         # thus changing the size of each dimension
-        self.setup()
 
+        middle = self.size.x / 2
+
+        self.background.position = self.size / 2
+        self.background.size = self.size
+
+        self.title.position = Vector2(middle, self.size.y - 125)
+
+        self.back_button.position = Vector2(75, self.size.y - 75)
+        
+        self.first_place.position = Vector2(middle,  self.size.y - 200 )
+        self.second_place.position =  Vector2(middle, self.size.y - 275)
+        self.third_place.position = Vector2(middle, self.size.y - 350)
+        self.fourth_place.position =  Vector2(middle, self.size.y - 425)
+        self.fifth_place.position =  Vector2(middle, self.size.y - 500)
+        
     def pause(self):
         # this method is called, when user touches the home button
         # save anything before app is put to background
