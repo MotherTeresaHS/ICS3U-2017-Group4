@@ -5,6 +5,7 @@
 
 from scene import *
 import math
+import random
 import sound
 import datetime
 
@@ -56,6 +57,13 @@ class Asteroid:
             xpos = self.sprite.position[0] + self.x_velocity * self.sprite.scene.dt
             ypos = self.sprite.position[1] + self.y_velocity * self.sprite.scene.dt
             self.distance += self.speed * self.sprite.scene.dt
+
+            #Asteroid Logic
+            if random.randint(0,1) == 0:
+                self.sprite.rotation = math.degrees(self.sprite.rotation + 1)
+            else:
+                self.sprite.rotation = math.degrees(self.sprite.rotation - 1)
+                
         
         #Should the ship move
         if self.sprite.position[0] < self.x1:
@@ -93,18 +101,19 @@ class Asteroid:
         
     def draw(self, parent, x , y):
         if self.size == 3:
-            scale = self.sprite_scale * (3/3)
+            #Large Asteroid (100%)
+            scale = self.sprite_scale * 1
         elif self.size == 2:
-            #scale = self.sprite_scale * (2/3)
-            scale = 0.3
-        else: 
-            #scale = self.sprite_scale * (1/3)
-            scale = 0.2
+            #Medim Asteroid (75%)
+            scale = self.sprite_scale * 0.75
+        else:
+            #Medim Asteroid (50%)
+            scale = self.sprite_scale * 0.5
         
         self.sprite = SpriteNode(self.sprite_file,
                                      parent = parent,
                                      position = Vector2(x,y),
-                                     scale = scale)
+                                     scale = self.sprite_scale)
         
        
     
