@@ -140,7 +140,7 @@ class GameScene(Scene):
         
         if self.ship.destroyed == True:
             if not self.presented_scene and time.time() - self.destroy_time > 3:
-                self.view.close()
+                self.dismiss_modal_scene()
         
         if len(self.asteroids) > 0:
             for asteroid in self.asteroids:
