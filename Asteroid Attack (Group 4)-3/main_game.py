@@ -145,6 +145,7 @@ class GameScene(Scene):
             for asteroid in self.asteroids:
                 asteroid.move()
                 if asteroid.sprite.frame.intersects(self.ship.sprite.frame) and self.ship.destroyed == False:
+                    sound.play_effect('./assets/sounds/boom.wav')
                     self.save_scores()
                     text_position = Vector2()
                     text_position.x = self.size.x/2

@@ -15,8 +15,8 @@ class Asteroid:
     
     def __init__(self, x1arg, y1arg, x2arg, y2arg, xAngle, size):
         #Sprite Properties
-        sprite_scale = 0.5
-        sprite_file = './assets/sprites/asteroid.png'        
+        self.sprite_scale = 0.5
+        self.sprite_file = './assets/sprites/asteroid.png'        
 
         # Flight Boundary 
         self.x1=x1arg
