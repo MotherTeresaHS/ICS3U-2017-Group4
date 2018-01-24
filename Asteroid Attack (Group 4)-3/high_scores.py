@@ -25,8 +25,9 @@ class HighScores(Scene):
 
         middle = self.size.x / 2
 
-        # add background color
-        self.background = SpriteNode(position = self.size / 2,
+        # add background image
+        self.background = SpriteNode(random_background(),
+                                     position = self.size / 2,
                                      color = 'black',
                                      parent = self,
                                      size = self.size)
@@ -34,12 +35,12 @@ class HighScores(Scene):
         # create title label
         title_position = Vector2()
         title_position.x = middle
-        title_position.y = self.size.y - 75
-        self.title = LabelNode(text = 'HIGH SCORES',
-                                      font = ('Helvetica', 60),
-                                      parent = self,
-                                      position = title_position,
-                                      scale = 0.75)
+        title_position.y = self.size.y - 50
+        self.title = SpriteNode('./assets/sprites/HISCORE2.png',
+                                     parent = self,
+                                     position = title_position,
+                                     anchor_point = Point(0.5, 1.0),
+                                     scale = 1.5)   
 
         back_button_position = self.size
         back_button_position.x = 75

@@ -4,6 +4,7 @@
 # This scene runs the main game.
 
 from scene import *
+import common
 import ui
 import math
 import datetime
@@ -67,7 +68,7 @@ class GameScene(Scene):
         # add background image
         background_position = Vector2(self.screen_center_x, 
                                       self.screen_center_y)
-        self.bg = SpriteNode('./assets/sprites/Background1.jpg',
+        self.bg = SpriteNode(random_background(),
                                      position = background_position, 
                                      parent = self, 
                                      size = self.size)
