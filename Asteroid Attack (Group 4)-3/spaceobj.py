@@ -14,8 +14,8 @@ class SpaceObject:
     def __init__(self, x1arg, y1arg, x2arg, y2arg, xAngle, size):
 
         #Sprite Properties
-        sprite_scale = 1
-        sprite_file = ''
+        self.sprite_scale = 1
+        self.sprite_file = ''
         self.sprite = None
 
         # Flight Boundary 
