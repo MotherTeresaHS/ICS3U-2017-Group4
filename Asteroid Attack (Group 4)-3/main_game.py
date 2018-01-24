@@ -130,8 +130,8 @@ class GameScene(Scene):
         
         if self.ship != None:
             self.ship.move()
-            self.ship.Rotate()
-            self.ship.Thrust()
+            self.ship.rotate()
+            self.ship.thrust()
         
         asteroid_create_chance = random.randint(1, 120)
         if asteroid_create_chance <= self.asteroid_attack_rate:
