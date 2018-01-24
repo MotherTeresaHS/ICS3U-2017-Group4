@@ -78,7 +78,7 @@ class Asteroid:
         else:
             adjustment = 0
             
-        self.speed = random.randint(self.speed,(self.speed + adjustment))
+        self.speed += adjustment
         
         self.distance=0
         self.rotation=random.randint(0,1)

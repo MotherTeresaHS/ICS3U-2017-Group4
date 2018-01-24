@@ -165,7 +165,7 @@ class GameScene(Scene):
                         
                 if len(self.ship.lazers) > 0:
                     #Check for collisions with lasers
-                    self.collision_detection(asteroid)
+                    self.laser_collision_detection(asteroid)
         else:
             pass
         

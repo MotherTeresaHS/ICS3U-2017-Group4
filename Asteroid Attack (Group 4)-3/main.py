@@ -26,7 +26,7 @@ from splash_scene import *
 main_view = ui.View()
 scene_view = SceneView(frame = main_view.bounds, flex = 'WH')
 #To show fps if needed 
-#scene_view.show_fps = True
+#scene_view.shows_fps = True
 main_view.multi_touch_enabled = True
 main_view.add_subview(scene_view)
 scene_view.scene = SplashScene()
