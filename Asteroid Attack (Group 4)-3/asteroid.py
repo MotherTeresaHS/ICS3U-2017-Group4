@@ -32,7 +32,7 @@ class Asteroid:
         self.y_velocity = float(0)
         
         self.distance=0
-        
+        self.rotation=random.randint(0,1)
         self.delete = False
         
         self.angle = xAngle + 90
@@ -59,10 +59,10 @@ class Asteroid:
             self.distance += self.speed * self.sprite.scene.dt
 
             #Asteroid Logic
-            if random.randint(0,1) == 0:
-                self.sprite.rotation = math.degrees(self.sprite.rotation + 1)
+            if  self.rotation == 0:
+                self.sprite.rotation += math.degrees(.0005)
             else:
-                self.sprite.rotation = math.degrees(self.sprite.rotation - 1)
+                self.sprite.rotation -= math.degrees(.0005)
                 
         
         #Should the ship move
@@ -113,7 +113,7 @@ class Asteroid:
         self.sprite = SpriteNode(self.sprite_file,
                                      parent = parent,
                                      position = Vector2(x,y),
-                                     scale = self.sprite_scale)
+                                     scale = scale)
         
        
     
