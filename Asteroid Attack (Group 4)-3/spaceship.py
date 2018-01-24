@@ -203,7 +203,9 @@ class SpaceShip:
 
             # Draw laser
             self.lazers[len(self.lazers)-1].draw(self.sprite.scene, self.sprite.position[0], self.sprite.position[1])
-            #self.lazers[len(self.lazers)-1].sprite.rotation = self.sprite.rotation
-            #self.lazers[len(self.lazers)-1].angle = self.angle
+
+            # Needed to keep laser aligned
+            self.lazers[len(self.lazers)-1].sprite.rotation = self.sprite.rotation
+            self.lazers[len(self.lazers)-1].angle = self.angle
             
     

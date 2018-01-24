@@ -42,8 +42,6 @@ class Laser:
         self.x_velocity = self.speed * self.scale_x 
         self.y_velocity = self.speed * self.scale_y 
         
-
-
     def move(self):
         
         if self.sprite.scene == None:
