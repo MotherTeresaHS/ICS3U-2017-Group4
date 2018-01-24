@@ -146,9 +146,13 @@ class GameScene(Scene):
             for asteroid in self.asteroids:
                 asteroid.move()
                 if asteroid.sprite.frame.intersects(self.ship.sprite.frame) and self.ship.destroyed == False:
+                    #Were close to the asteroid, need to see how close
+
+                    #Creat a second rect inside the frame, adjusted by a percentage
                     asteroid_adjustment = int(asteroid.sprite.frame.w * 0.25)
                     ship_adjustment = int(self.ship.sprite.frame.w * 0.1)
 
+                    #Check if the smaller rect intersected, if so game over
                     ship_rect = asteroid.sprite.frame.inset(asteroid_adjustment,asteroid_adjustment)
                     asteroid_rect = self.ship.sprite.frame.inset(ship_adjustment,ship_adjustment)
 
