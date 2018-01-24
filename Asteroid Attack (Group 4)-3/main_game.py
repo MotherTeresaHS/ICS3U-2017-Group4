@@ -28,7 +28,7 @@ class GameScene(Scene):
         self.asteroid_attack_rate = 1
         self.asteroid_attack_speed = 20.0
         self.asteroid_limit = 10.0
-        self.asteroid_max_asteroids = 20.0
+        self.asteroid_max_asteroids = 25.0
         
         self.size_of_screen_x = self.size.x
         self.size_of_screen_y = self.size.y
@@ -139,8 +139,8 @@ class GameScene(Scene):
         if asteroid_create_chance <= self.asteroid_attack_rate:
             if len(self.asteroids) < int(self.asteroid_limit):
                 #Slowly increase
-                self.asteroid_limit += 0.25
-
+                self.asteroid_limit += 0.10
+                
                 #Don't spawn too many
                 if self.asteroid_limit >= self.asteroid_max_asteroids:
                     self.asteroid_limit = self.asteroid_max_asteroids 
