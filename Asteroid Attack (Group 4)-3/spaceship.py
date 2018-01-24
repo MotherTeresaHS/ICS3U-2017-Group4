@@ -74,7 +74,7 @@ class SpaceShip:
 
             #Show ship with thrusters
             if self.destroyed == False:
-                sound.play_effect('./assets/sounds/thrust2.wav')
+                #sound.play_effect('./assets/sounds/thrust2.wav')
                 if self.spriteFile != self.thrust_sprite:
                     self.sprite.texture = self.thrust_texture
                     self.spriteFile = self.thrust_sprite
