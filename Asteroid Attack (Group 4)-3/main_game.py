@@ -41,25 +41,25 @@ class GameScene(Scene):
         
         # add borders to the screen
         self.border1 = SpriteNode(position = Point(0,self.size.y ),
-                                    anchor_point = Point(0,1),
+                                    #anchor_point = Point(0,1),
                                     z_position = 1.0,
                                     color = 'black', 
                                     parent = self,
                                     size = Size(self.size.x,45))
         self.border2 = SpriteNode(position = Point(0,0 ),
-                                 anchor_point = Point(0,0),
+                                 #anchor_point = Point(0,0),
                                  z_position = 1.0,
                                  color = 'black', 
                                  parent = self,
                                  size = Size(self.size.x,140))
         self.border3 = SpriteNode(position = Point(0,0 ),
-                                    anchor_point = Point(0,0),
+                                    #anchor_point = Point(0,0),
                                     z_position = 1.0,
                                     color = 'black', 
                                     parent = self,
                                     size = Size(12.5,self.size.y))
         self.border4 = SpriteNode(position = Point(self.size.x - 12.5 ,0 ),
-                                    anchor_point = Point(0,0),
+                                    #anchor_point = Point(0,0),
                                     z_position = 1.0,
                                     color = 'black', 
                                     parent = self,
@@ -139,7 +139,7 @@ class GameScene(Scene):
                 self.asteroid_generator()
         
         if self.ship.destroyed == True:
-            if not self.presented_scene and time.time() - self.destroy_time > 3:
+            if not self.presented_scene and time.time() - self.destroy_time > 5:
                 self.dismiss_modal_scene()
         
         if len(self.asteroids) > 0:
