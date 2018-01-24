@@ -26,6 +26,8 @@ from splash_scene import *
 #  ..use when deploying app for Xcode and the App Store
 main_view = ui.View()
 scene_view = SceneView(frame = main_view.bounds, flex = 'WH')
+#scene_view.show_fps = True
+scene_view.multi_touch_enable = True
 main_view.add_subview(scene_view)
 scene_view.scene = SplashScene()
 main_view.present(hide_title_bar = True, animated = False)
