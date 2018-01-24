@@ -29,13 +29,13 @@ class Asteroid:
         if colour == ASTEROID_NONE :
             pick = random.randint(1,7)
             if pick == 1:
-                colour == ASTEROID_BROWN
+                colour = ASTEROID_BROWN
             elif pick >= 2 and pick <=4:
                pick = random.randint(1,3)
-               colour == ASTEROID_GREY
+               colour = ASTEROID_GREY
             else:
                pick = random.randint(1,3)
-               colour == ASTEROID_RED
+               colour = ASTEROID_RED
         elif colour == ASTEROID_BROWN:
             pick = 1
         else:
@@ -70,8 +70,6 @@ class Asteroid:
         self.scale_y = math.sin(math.radians(self.angle)) 
         self.x_velocity = self.speed * self.scale_x 
         self.y_velocity = self.speed * self.scale_y 
-        
-        #print('Missle', self.angle, self.scale_x, self.scale_y, self.x_velocity, self.y_velocity)
     
     def move(self):
         
