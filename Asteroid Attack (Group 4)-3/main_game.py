@@ -317,7 +317,7 @@ class GameScene(Scene):
         
         text_position = Vector2()
         text_position.x = self.size.x/2
-        text_position.y = self.size.y/2
+        text_position.y = self.size.y/2 + 95
         self.game_over = SpriteNode('./assets/sprites/GAMEOVER.png',
                                             z_position = 5,
                                             parent = self,

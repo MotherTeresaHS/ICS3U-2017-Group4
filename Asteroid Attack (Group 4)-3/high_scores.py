@@ -116,7 +116,7 @@ class HighScores(Scene):
         # thus changing the size of each dimension
 
         middle = self.size.x / 2
-        #padding = self.size.x * .25
+        padding = (self.size.y - 500 ) /2
         self.background.position = self.size / 2
         self.background.size = self.size
 
