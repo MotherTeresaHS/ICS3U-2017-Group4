@@ -9,15 +9,32 @@ import random
 import sound
 import datetime
 
+asteroid_colours = Enum('Brown','Grey','Red','None')
 
 #ShipSize Enum('LARGE',  'MEDIUM', 'SMALL')
 
 class Asteroid:
     
-    def __init__(self, x1arg, y1arg, x2arg, y2arg, xAngle, size):
+    def __init__(self, x1arg, y1arg, x2arg, y2arg, xAngle, size, colour):
+
         #Sprite Properties
         self.sprite_scale = 0.5
-        self.sprite_file = './assets/sprites/asteroid.png'        
+        
+
+        #Colour
+        if colour == asteroid_colours.None :
+            pick = random.randint(1,7)
+            if pick == 1:
+                colour = asteroid_colours.Brown
+            elif pick == 1:
+                colour = asteroid_colours.Red
+                pick = random.randint(1,3)
+                self.sprite_file = './assets/sprites/G' + str(pick) + '.png'
+            else:
+                colour = asteroid_colours.Grey
+                pick = random.randint(1,3)
+        self.colour = colour
+        self.sprite_file = './assets/sprites/' + colour[1:1] + str(pick) + '.png'
 
         # Flight Boundary 
         self.x1=x1arg

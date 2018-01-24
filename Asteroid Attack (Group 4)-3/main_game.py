@@ -162,8 +162,8 @@ class GameScene(Scene):
                     for laser in self.ship.lazers:
                         if asteroid.sprite.frame.intersects(laser.sprite.frame):
                             if asteroid.size > 1:
-                                self.asteroid_builder(laser.angle, asteroid.sprite.position, asteroid.size - 1)
-                                self.asteroid_builder(laser.angle, asteroid.sprite.position, asteroid.size - 1)
+                                self.asteroid_builder(laser.angle, asteroid.sprite.position, asteroid.size - 1, asteroid.colour)
+                                self.asteroid_builder(laser.angle, asteroid.sprite.position, asteroid.size - 1, asteroid.colour)
                             if asteroid.size == 3:
                                 self.score += 99
                             elif asteroid.size == 2:
@@ -242,11 +242,11 @@ class GameScene(Scene):
         asteroid_angle += (random.randint(0,3) * 90 )
 
         #Create the Asteroid and Append to the list
-        self.asteroids.append(Asteroid(0, 150 , self.size.x, self.size.y - 50, asteroid_angle, 3))
+        self.asteroids.append(Asteroid(0, 150 , self.size.x, self.size.y - 50, asteroid_angle, 3, asteroid_colours.None))
         self.asteroids[len(self.asteroids)-1].draw(self, asteroid_start_position.x, asteroid_start_position.y)
      
         
-    def asteroid_builder(self, impact_angle, position, size):
+    def asteroid_builder(self, impact_angle, position, size, colour):
 
         #Similar to the generator, but builds a new version at a specified location
         #Used for asteroid splitting.
@@ -262,7 +262,7 @@ class GameScene(Scene):
         asteroid_angle = random.randint(min_angle, max_angle)
 
         #Create the Asteroid and Append to the list
-        self.asteroids.append(Asteroid(0, 150 , self.size.x, self.size.y-50, asteroid_angle, size))
+        self.asteroids.append(Asteroid(0, 150 , self.size.x, self.size.y-50, asteroid_angle, size, colour))
         self.asteroids[len(self.asteroids)-1].draw(self, position.x, position.y)
         
     def save_scores(self):
