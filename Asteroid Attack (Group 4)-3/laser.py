@@ -1,7 +1,7 @@
 # Created by: Justin Bronson
 # Created on: Dec 2017
 # Created for: ICS3U
-# This scene runs the main game.
+# This class controls the lasers
 
 from scene import *
 import math
