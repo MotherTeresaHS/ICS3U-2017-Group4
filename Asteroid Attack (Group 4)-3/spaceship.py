@@ -37,7 +37,7 @@ class SpaceShip:
         self.acceleration = 3
         self.deceleration_rate = 0.25
         self.max_speed = 25
-        self.sensitivity = math.radians(2)
+        self.sensitivity = math.radians(3)
         
         self.lazers = []
         self.sprite = None

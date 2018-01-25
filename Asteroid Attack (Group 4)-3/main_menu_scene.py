@@ -1,3 +1,7 @@
+# Created by: Justin Bronson
+# Created on: Dec 2017
+#
+# Script is taken from Mr.Coxall's sample game
 # Created by: Mr. Coxall
 # Created on: Sep 2016
 # Created for: ICS3U

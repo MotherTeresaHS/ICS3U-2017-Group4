@@ -56,11 +56,29 @@ class Asteroid:
         self.x2=x2arg
         self.y2=y2arg
         
-        # Asteroid Properties 
+        # Asteroid Properties
         self.speed = 100
         self.size = size
         self.x_velocity = float(0)
         self.y_velocity = float(0)
+
+        if random.randint(0,1) == 0:
+            adjustment_updown = 1
+        else: 
+            adjustment_updown = -1
+
+
+        #Logic to vary speed
+        if self.size == ASTEROID_LARGE:
+            adjustment = int(self.speed * .05) * adjustment_updown
+        elif self.size == ASTEROID_MEDIUM:
+            adjustment = int(self.speed * .10) * adjustment_updown
+        elif self.size == ASTEROID_SMALL:
+            adjustment = int(self.speed * .10) * adjustment_updown
+        else:
+            adjustment = 0
+            
+        self.speed += adjustment
         
         self.distance=0
         self.rotation=random.randint(0,1)

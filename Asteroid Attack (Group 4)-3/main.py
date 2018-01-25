@@ -1,5 +1,8 @@
-# Created by: Mr. Coxall
-# Created on: Sep 2016
+# Created by: Justin Bronson
+# Created on: Dec 2017
+#
+# Script is taken from Mr.Coxall's sample game
+# Created by: Mr Coxall
 # Created for: ICS3U
 # This program is the first file in a multi-scene game template
 #    This template is meant to be used with the Xcode template,
@@ -26,8 +29,9 @@ from splash_scene import *
 main_view = ui.View()
 scene_view = SceneView(frame = main_view.bounds, flex = 'WH')
 #To show fps if needed 
-#scene_view.show_fps = True
-main_view.multi_touch_enabled = True
+#scene_view.shows_fps = True
+#main_view.multi_touch_enabled = True
+main_view.multitouch_enabled=True
 main_view.add_subview(scene_view)
 scene_view.scene = SplashScene()
 main_view.present(hide_title_bar = True, animated = False)

@@ -20,7 +20,6 @@ from main_menu_scene import *
 class GameScene(Scene):
     def setup(self):
         # this method is called, when user moves to this scene
-        #self.hide_close(True)
         # this code was taken from Mr. Coxalls game_scene
         self.ship = SpaceShip(0, 150 , self.size.x, self.size.y-50)
         
@@ -40,30 +39,27 @@ class GameScene(Scene):
         self.score = 0
         
         # add borders to the screen
-        self.border1 = SpriteNode(position = Vector2(0,self.size.y ),
-                                    #anchor_point = Point(0,1),
+        self.border1 = SpriteNode(position = Vector2(self.size_of_screen_x / 2, 70),
+                                    z_position = 1.0,
+                                    color = 'black', 
+                                      parent = self,
+                                    size = Size(self.size.x,140))
+        
+        self.border2 = SpriteNode(position = Vector2(self.size_of_screen_x /2  , self.size_of_screen_y - 22),
+                                  z_position = 1.0,
+                                  color = 'black', 
+                                  parent = self,
+                                  size = Size(self.size.x, 45))
+        self.border3 = SpriteNode(position = Vector2(6,self.size_of_screen_y / 2 ),
                                     z_position = 1.0,
                                     color = 'black', 
                                     parent = self,
-                                    size = Size(self.size.x,45))
-        self.border2 = SpriteNode(position = Vector2(0,0 ),
-                                 #anchor_point = Point(0,0),
-                                 z_position = 1.0,
-                                 color = 'black', 
-                                 parent = self,
-                                 size = Size(self.size.x,140))
-        self.border3 = SpriteNode(position = Vector2(0,0 ),
-                                    #anchor_point = Point(0,0),
+                                    size = Size(12,self.size_of_screen_y ))
+        self.border4 = SpriteNode(position = Vector2(self.size_of_screen_x - 6 , self.size_of_screen_y / 2),
                                     z_position = 1.0,
                                     color = 'black', 
                                     parent = self,
-                                    size = Size(12.5,self.size.y))
-        self.border4 = SpriteNode(position = Vector2(self.size.x - 12.5 ,0 ),
-                                    #anchor_point = Point(0,0),
-                                    z_position = 1.0,
-                                    color = 'black', 
-                                    parent = self,
-                                    size = Size(12.5,self.size.y))
+                                    size = Size(12,self.size_of_screen_y))
         
         # add background image
         background_position = Vector2(self.screen_center_x, 
@@ -85,7 +81,7 @@ class GameScene(Scene):
                                      scale = self.scale_size)
         
         right_button_position = Vector2()
-        right_button_position.x = self.size_of_screen_x - 774
+        right_button_position.x = 250
         right_button_position.y = 75
         self.right_button = SpriteNode('./assets/sprites/right.png',
                                      parent = self,
@@ -95,7 +91,7 @@ class GameScene(Scene):
                                      scale = 0.25)
     
         left_button_position = Vector2()
-        left_button_position.x = self.size_of_screen_x - 924
+        left_button_position.x = 100
         left_button_position.y = 75
         self.left_button = SpriteNode('./assets/sprites/left.png',
                                      parent = self,
@@ -129,18 +125,23 @@ class GameScene(Scene):
     def update(self):
         
         if self.ship != None:
-            self.ship.move()
-            self.ship.rotate()
-            self.ship.thrust()
+            #In case we don't find the ship object
+            if self.ship.sprite != None:
+                self.ship.move()
+                self.ship.rotate()
+                self.ship.thrust()
+            
+            if self.ship.destroyed == True:
+                if not self.presented_scene and time.time() - self.destroy_time > 5:
+                    #Close scene
+                    self.dismiss_modal_scene()
+            
         
         asteroid_create_chance = random.randint(1, 120)
         if asteroid_create_chance <= self.asteroid_attack_rate:
             if len(self.asteroids) < 10:
                 self.asteroid_generator()
         
-        if self.ship.destroyed == True:
-            if not self.presented_scene and time.time() - self.destroy_time > 5:
-                self.dismiss_modal_scene()
         
         if len(self.asteroids) > 0:
             for asteroid in self.asteroids:
@@ -164,7 +165,7 @@ class GameScene(Scene):
                         
                 if len(self.ship.lazers) > 0:
                     #Check for collisions with lasers
-                    self.collision_detection(asteroid)
+                    self.laser_collision_detection(asteroid)
         else:
             pass
         
@@ -206,7 +207,41 @@ class GameScene(Scene):
     def did_change_size(self):
         # this method is called, when user changes the orientation of the screen
         # thus changing the size of each dimension
-        pass
+
+        #copied from setup
+        self.size_of_screen_x = self.size.x
+        self.size_of_screen_y = self.size.y
+        self.screen_center_x = self.size_of_screen_x/2
+        self.screen_center_y = self.size_of_screen_y/2
+
+        background_position = Vector2(self.screen_center_x, self.screen_center_y)
+
+        self.bg.position = background_position
+        self.bg.size = self.size
+
+        boost_button_position = Vector2()
+        boost_button_position.x = self.size_of_screen_x - 250
+        boost_button_position.y = 75
+        self.boost_button.position = boost_button_position
+
+        shoot_button_position = Vector2()
+        shoot_button_position.x = self.size_of_screen_x - 100
+        shoot_button_position.y = 75
+        self.shoot_button.position = shoot_button_position
+
+        score_position = Vector2()
+        score_position.x = 50
+        score_position.y = self.size.y - 25
+        self.score_label.position = score_position
+
+        self.border1.position = Vector2(self.size_of_screen_x / 2, 70)
+        self.border1.size = Size(self.size.x, 140)
+        self.border2.position = Vector2(self.size_of_screen_x /2, self.size_of_screen_y - 22)
+        self.border2.size = Size(self.size.x, 45)
+        self.border3.position = Vector2(6, self.size_of_screen_y / 2)
+        self.border3.size = Size(12, self.size_of_screen_y)
+        self.border4.position = Vector2(self.size_of_screen_x - 6, self.size_of_screen_y / 2)
+        self.border4.size = Size(12, self.size_of_screen_y)        
     
     def pause(self):
         # this method is called, when user touches the home button
@@ -274,17 +309,6 @@ class GameScene(Scene):
                     config.write(configfile)
                 break
     
-    def hide_close(self, state=True):
-        #Taken from omz forum - user robnee
-        #https://forum.omz-software.com/topic/3758/disable-stop-button-x-in-scene/5
-		
-        from objc_util import ObjCInstance
-        v = ObjCInstance(self.view)
-        # Find close button.  I'm sure this is the worst way to do it
-        for x in v.subviews():
-            if str(x.description()).find('UIButton') >= 0:
-                x.setHidden(state)
-
     def game_over(self):
         #Game is over play boom
         sound.play_effect('./assets/sounds/boom.wav')
@@ -293,9 +317,9 @@ class GameScene(Scene):
         
         text_position = Vector2()
         text_position.x = self.size.x/2
-        text_position.y = self.size.y/2
-        self.game_over = LabelNode(text = ('GAME OVER'),
-                                            font = ('Helvetica', 140),
+        text_position.y = self.size.y/2 + 95
+        self.game_over = SpriteNode('./assets/sprites/GAMEOVER.png',
+                                            z_position = 5,
                                             parent = self,
                                             position = text_position,
                                             scale = 1)
@@ -307,38 +331,50 @@ class GameScene(Scene):
         self.ship.destroyed = True
         self.ship.sprite.texture = None
 
-    def collision_detection(self, asteroid):
+    def laser_collision_detection(self, asteroid):
         #Loop through laser list
         for laser in self.ship.lazers:
             if asteroid.sprite.frame.intersects(laser.sprite.frame):
                 #Asteroid has intersected a laser
-                if asteroid.size > ASTEROID_SMALL:
-                    self.asteroid_builder(laser.angle, asteroid.sprite.position, asteroid.size - 1, asteroid.colour)
-                    self.asteroid_builder(laser.angle, asteroid.sprite.position, asteroid.size - 1, asteroid.colour)
-                if asteroid.size == ASTEROID_LARGE:
-                    self.score += 99
-                elif asteroid.size == ASTEROID_MEDIUM:
-                    self.score += 199
-                else:
-                    # SMALL
-                    self.score += 499
+                #Were close to the asteroid, need to see how close
 
-                #Update the score label
-                self.score_label.text = ('SCORE: ' + str(self.score))
+                #Creat a second rect inside the frame, adjusted by a percentage
+                asteroid_adjustment = int(asteroid.sprite.frame.w * 0.25)
+                laser_adjustment = int(laser.sprite.frame.w * 0.5)
 
-                #Remove the laser from the scene and list
-                laser.sprite.remove_from_parent()
+                #Check if the smaller rect intersected, if so game over
+                laser_rect = laser.sprite.frame.inset(laser_adjustment, laser_adjustment)
+                asteroid_rect = asteroid.sprite.frame.inset(asteroid_adjustment, asteroid_adjustment)
 
-                try:
-                    self.ship.lazers.remove(laser)
-                except:
-                    #Related to Sceneview vs run event
-                    pass
+                if laser_rect.intersects(asteroid_rect):
+                    
+                    if asteroid.size > ASTEROID_SMALL:
+                        self.asteroid_builder(laser.angle, asteroid.sprite.position, asteroid.size - 1, asteroid.colour)
+                        self.asteroid_builder(laser.angle, asteroid.sprite.position, asteroid.size - 1, asteroid.colour)
+                    if asteroid.size == ASTEROID_LARGE:
+                        self.score += 99
+                    elif asteroid.size == ASTEROID_MEDIUM:
+                        self.score += 199
+                    else:
+                        # SMALL
+                        self.score += 499
 
-                #Remove the asteroid from the scene and list
-                asteroid.sprite.remove_from_parent()
-                try:
-                    self.asteroids.remove(asteroid)
-                except:
-                    #Related to Sceneview vs run event
-                    pass
+                    #Update the score label
+                    self.score_label.text = ('SCORE: ' + str(self.score))
+
+                    #Remove the laser from the scene and list
+                    laser.sprite.remove_from_parent()
+
+                    try:
+                        self.ship.lazers.remove(laser)
+                    except:
+                        #Related to Sceneview vs run event
+                        pass
+
+                    #Remove the asteroid from the scene and list
+                    asteroid.sprite.remove_from_parent()
+                    try:
+                        self.asteroids.remove(asteroid)
+                    except:
+                        #Related to Sceneview vs run event
+                        pass
